@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"os"
+	"reflect"
 	"sync"
 	"time"
 
@@ -12,10 +14,31 @@ import (
 	"github.com/tomeai/dataflow/api/v1/sink"
 )
 
+func metadataToMap(meta Metadata) map[string]interface{} {
+	result := make(map[string]interface{})
+	v := reflect.ValueOf(meta)
+	t := reflect.TypeOf(meta)
+
+	for i := 0; i < t.NumField(); i++ {
+		key := t.Field(i).Tag.Get("json")
+		if key == "" {
+			key = t.Field(i).Name
+		}
+		result[key] = v.Field(i).Interface()
+	}
+	return result
+}
+
+type Metadata struct {
+	Source    string `json:"source"`
+	Url       string `json:"url"`
+	CrawlTime string `json:"crawl_time"`
+}
+
 // Record 表示一条数据 + 元信息
 type Record struct {
-	Item     any               `json:"data"`     // 实际数据内容
-	Metadata map[string]string `json:"metadata"` // 源、url、时间等
+	Item     any      `json:"data"`     // 实际数据内容
+	Metadata Metadata `json:"metadata"` // 源、url、时间等
 }
 
 type ResultService struct {
@@ -27,9 +50,16 @@ type ResultService struct {
 
 var (
 	once    sync.Once
-	svc     *ResultService
 	initErr error
 )
+
+func getGRPCAddr() string {
+	addr := os.Getenv("DATAHUB_GRPC_ADDR")
+	if addr == "" {
+		addr = "127.0.0.1:9000"
+	}
+	return addr
+}
 
 // 初始化 gRPC 客户端单例
 func getClient() (sink.DataHubClient, error) {
@@ -37,7 +67,7 @@ func getClient() (sink.DataHubClient, error) {
 	once.Do(func() {
 		conn, err := grpc.DialInsecure(
 			context.Background(),
-			grpc.WithEndpoint("127.0.0.1:9000"),
+			grpc.WithEndpoint(getGRPCAddr()),
 			grpc.WithTimeout(5*time.Second),
 			grpc.WithMiddleware(recovery.Recovery()),
 		)
@@ -79,7 +109,8 @@ func (r *ResultService) SaveItems(items []Record) error {
 	for _, item := range items {
 		record := make(map[string]any)
 		record["data"] = item.Item
-		for k, v := range item.Metadata {
+		metaMap := metadataToMap(item.Metadata)
+		for k, v := range metaMap {
 			record[k] = v
 		}
 		log.Printf("[sink] item: %+v\n", record)
