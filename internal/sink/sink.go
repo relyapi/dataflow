@@ -3,6 +3,7 @@ package sink
 import (
 	"context"
 	"data-flow/api/v1/flow"
+	"data-flow/internal/conf"
 	"data-flow/internal/utils"
 	"encoding/base64"
 	"fmt"
@@ -125,6 +126,10 @@ func NewMysqlSink(sinkInfo *flow.Sink) (DataHubSink, error) {
 
 	if err != nil {
 		return nil, fmt.Errorf("连接 MySQL 失败: %w", err)
+	}
+
+	if err := db.Exec(fmt.Sprintf(conf.MysqlDSL, sinkInfo.TableName)).Error; err != nil {
+		log.Printf("MySQL %s %v", sinkInfo.TableName, err)
 	}
 
 	return &MysqlSink{
