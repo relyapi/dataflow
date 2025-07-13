@@ -1,13 +1,13 @@
 package server
 
 import (
-	"data-flow/api/v1/config"
-	"data-flow/api/v1/sink"
-	"data-flow/internal/conf"
-	"data-flow/internal/service"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/tomeai/dataflow/api/v1/config"
+	"github.com/tomeai/dataflow/api/v1/sink"
+	"github.com/tomeai/dataflow/internal/conf"
+	"github.com/tomeai/dataflow/internal/service"
 )
 
 // NewGRPCServer new a gRPC server.

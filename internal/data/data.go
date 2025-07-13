@@ -1,10 +1,10 @@
 package data
 
 import (
-	"data-flow/api/v1/flow"
-	"data-flow/internal/conf"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
+	"github.com/tomeai/dataflow/api/v1/flow"
+	"github.com/tomeai/dataflow/internal/conf"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"time"

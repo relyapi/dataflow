@@ -2,8 +2,9 @@ package data
 
 import (
 	"context"
-	"data-flow/api/v1/flow"
-	"data-flow/internal/biz"
+	"github.com/tomeai/dataflow/api/v1/flow"
+	"github.com/tomeai/dataflow/internal/biz"
+
 	"errors"
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"

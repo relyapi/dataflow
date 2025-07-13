@@ -7,13 +7,13 @@
 package main
 
 import (
-	"data-flow/internal/biz"
-	"data-flow/internal/conf"
-	"data-flow/internal/data"
-	"data-flow/internal/server"
-	"data-flow/internal/service"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/tomeai/dataflow/internal/biz"
+	"github.com/tomeai/dataflow/internal/conf"
+	"github.com/tomeai/dataflow/internal/data"
+	"github.com/tomeai/dataflow/internal/server"
+	"github.com/tomeai/dataflow/internal/service"
 )
 
 import (

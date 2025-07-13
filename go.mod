@@ -1,4 +1,4 @@
-module data-flow
+module github.com/tomeai/dataflow
 
 go 1.24.0
 

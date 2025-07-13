@@ -2,9 +2,9 @@ package sink
 
 import (
 	"context"
-	"data-flow/internal/utils"
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/tomeai/dataflow/internal/utils"
 	"go.mongodb.org/mongo-driver/mongo"
 	"time"
 )
