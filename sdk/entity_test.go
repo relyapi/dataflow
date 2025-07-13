@@ -17,10 +17,10 @@ func TestSave(t *testing.T) {
 		Item: map[string]any{
 			"name": "opentome",
 		},
-		Metadata: map[string]string{
-			"source":     "list",
-			"url":        "https://linux.do/t/topic/761213111",
-			"crawl_time": time.Now().Format("2006-01-02 15:04:05"),
+		Metadata: Metadata{
+			Source:    "list",
+			Url:       "https://linux.do/t/topic/73111",
+			CrawlTime: time.Now().Format("2006-01-02 15:04:05"),
 		},
 	}
 
