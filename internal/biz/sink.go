@@ -1,10 +1,10 @@
 package biz
 
 import (
-	"data-flow/internal/sink"
-	"data-flow/internal/utils"
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/tomeai/dataflow/internal/sink"
+	"github.com/tomeai/dataflow/internal/utils"
 	"sync"
 )
 

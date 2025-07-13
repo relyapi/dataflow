@@ -1,8 +1,8 @@
 package service
 
 import (
-	"data-flow/api/v1/config"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/tomeai/dataflow/api/v1/config"
 )
 
 type ConfigServiceManager struct {

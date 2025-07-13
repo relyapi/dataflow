@@ -2,12 +2,12 @@ package main
 
 import (
 	"context"
-	"data-flow/api/v1/sink"
 	"fmt"
 	"github.com/elastic/go-elasticsearch/v9"
 	"github.com/elastic/go-elasticsearch/v9/esapi"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/tomeai/dataflow/api/v1/sink"
 	"log"
 	"strings"
 	"testing"

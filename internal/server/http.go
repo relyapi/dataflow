@@ -1,12 +1,12 @@
 package server
 
 import (
-	"data-flow/api/v1/config"
-	"data-flow/internal/conf"
-	"data-flow/internal/service"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/tomeai/dataflow/api/v1/config"
+	"github.com/tomeai/dataflow/internal/conf"
+	"github.com/tomeai/dataflow/internal/service"
 )
 
 // NewHTTPServer new an HTTP server.

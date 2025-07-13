@@ -1,9 +1,9 @@
 package service
 
 import (
-	"data-flow/internal/biz"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
+	"github.com/tomeai/dataflow/internal/biz"
 )
 
 // ProviderSet is service providers.

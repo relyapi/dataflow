@@ -2,9 +2,10 @@ package sink
 
 import (
 	"context"
-	"data-flow/api/v1/flow"
-	"data-flow/internal/conf"
-	"data-flow/internal/utils"
+	"github.com/tomeai/dataflow/api/v1/flow"
+	"github.com/tomeai/dataflow/internal/conf"
+	"github.com/tomeai/dataflow/internal/utils"
+
 	"encoding/base64"
 	"fmt"
 	"github.com/cenkalti/backoff/v4"

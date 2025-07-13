@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"data-flow/api/v1/sink"
 	"encoding/json"
+	"github.com/tomeai/dataflow/api/v1/sink"
 )
 
 type Resource struct {

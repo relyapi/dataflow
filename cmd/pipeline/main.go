@@ -1,8 +1,8 @@
 package main
 
 import (
-	"data-flow/internal/conf"
 	"flag"
+	"github.com/tomeai/dataflow/internal/conf"
 	"os"
 
 	"github.com/go-kratos/kratos/v2"

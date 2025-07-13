@@ -1,13 +1,13 @@
 package service
 
 import (
-	"data-flow/api/v1/sink"
-	"data-flow/internal/biz"
-	"data-flow/internal/utils"
 	"errors"
 	"github.com/bytedance/sonic"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
+	"github.com/tomeai/dataflow/api/v1/sink"
+	"github.com/tomeai/dataflow/internal/biz"
+	"github.com/tomeai/dataflow/internal/utils"
 	"google.golang.org/grpc"
 	"io"
 	"strings"

@@ -2,10 +2,10 @@ package sink
 
 import (
 	"context"
-	"data-flow/internal/utils"
 	"fmt"
 	"github.com/bytedance/sonic"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/tomeai/dataflow/internal/utils"
 	client "github.com/zinclabs/sdk-go-zincsearch"
 	"time"
 )

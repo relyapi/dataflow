@@ -1,8 +1,8 @@
 package sink
 
 import (
-	"data-flow/internal/utils"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/tomeai/dataflow/internal/utils"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
