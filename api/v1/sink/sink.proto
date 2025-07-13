@@ -3,9 +3,6 @@ syntax = "proto3";
 package api.v1.sink;
 
 option go_package = "github.com/tomeai/dataflow/api/v1/sink;sink";
-//option go_package = "data-flow/api/v1/sink;sink";
-option java_multiple_files = true;
-option java_package = "api.v1.sink";
 
 import "google/protobuf/any.proto";
 

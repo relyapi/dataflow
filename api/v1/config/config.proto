@@ -2,10 +2,7 @@ syntax = "proto3";
 
 package api.v1.config;
 
-//option go_package = "data-flow/api/v1/config;config";
 option go_package = "github.com/tomeai/dataflow/api/v1/config;config";
-option java_multiple_files = true;
-option java_package = "api.v1.config";
 
 import "google/api/annotations.proto";
 

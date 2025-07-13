@@ -5,8 +5,6 @@ import "protobuf/gogo/gogo.proto";
 
 option (gogoproto.populate_all) = true;
 option go_package = "v1/flow;flow";
-option java_multiple_files = true;
-option java_package = "api.v1.flow";
 
 // Source 数据存储源
 message Source {
