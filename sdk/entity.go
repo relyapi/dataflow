@@ -91,8 +91,6 @@ func (r *ResultService) SaveItems(items []Record) error {
 			}
 			batch = batch[:0]
 		}
-
-		// 也可按 i 批次控制打印日志
 	}
 
 	// 发送剩余
