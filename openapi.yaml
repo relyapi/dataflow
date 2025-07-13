@@ -1,0 +1,59 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: ConfigHub API
+    description: |-
+        添加数据源
+         1. 动态配置数据源
+    version: 0.0.1
+paths:
+    /dataflow/sink/create:
+        post:
+            tags:
+                - ConfigHub
+            description: 创建sink
+            operationId: ConfigHub_CreateSink
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.v1.config.CreateSinkRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.v1.config.CreateSinkResponse'
+components:
+    schemas:
+        api.v1.config.CreateSinkRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                    description: 名称
+                dnName:
+                    type: string
+                    description: 数据库名称
+                tableName:
+                    type: string
+                    description: 表名
+                sourceId:
+                    type: integer
+                    description: source源
+                    format: int32
+                remark:
+                    type: string
+                    description: 备注
+            description: 创建sink，返回sink_id
+        api.v1.config.CreateSinkResponse:
+            type: object
+            properties:
+                taskId:
+                    type: string
+tags:
+    - name: ConfigHub

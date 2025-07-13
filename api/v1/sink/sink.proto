@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package api.v1.sink;
+
+option go_package = "data-flow/api/v1/sink;sink";
+option java_multiple_files = true;
+option java_package = "api.v1.sink";
+
+import "google/protobuf/any.proto";
+
+
+enum SinkType {
+  // 直接插入
+  INSERT = 0;
+  // 根据指定ID更新
+  UPDATE = 1;
+  // log数据
+  LOG = 2;
+}
+
+// 小爬虫专用（接收数据）
+message DoItemRequest {
+  string sinkId = 1;
+  // 数据类型
+  SinkType sinkType = 2;
+  // Data
+  google.protobuf.Any data = 3;
+}
+
+message DoSinkRequest {
+  string sinkId = 1;
+  // 数据类型
+  SinkType sinkType = 2;
+  // 元数据隐藏在data里面
+  bytes data = 3;
+}
+
+message Response {
+  bool status = 1;
+}
+
+// pipeline逻辑
+service DataHub{
+  // 接收任意数据类型
+  rpc DoSink(stream DoSinkRequest) returns (Response){}
+  // 接收定义好的 protobuf item 数据
+  rpc DoItem(stream DoItemRequest) returns (Response){}
+}
+

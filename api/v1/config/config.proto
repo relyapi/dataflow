@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package api.v1.config;
+
+option go_package = "data-flow/api/v1/config;config";
+option java_multiple_files = true;
+option java_package = "api.v1.config";
+
+import "google/api/annotations.proto";
+
+
+message UpdateSourceRequest{
+  string host = 1;
+  int32 port = 2;
+  string username = 3;
+  string password = 4;
+}
+
+message SourceResponse{
+  string msg = 1;
+  string id = 2;
+}
+
+
+message AddSourceRequest{
+  string host = 1;
+  int32 port = 2;
+  string username = 3;
+  string password = 4;
+}
+
+// 创建sink，返回sink_id
+message CreateSinkRequest{
+  // 名称
+  string name = 1;
+  // 数据库名称
+  string dnName = 2;
+  // 表名
+  string tableName = 3;
+  // source源
+  int32 sourceId = 4;
+  // 备注
+  string remark = 5;
+}
+
+message CreateSinkResponse{
+  string  taskId = 1;
+}
+
+// 添加数据源
+// 1. 动态配置数据源
+service ConfigHub{
+  // 添加数据源
+  rpc UpdateSource(UpdateSourceRequest) returns (SourceResponse){}
+  // 更新数据源
+  rpc AddSource(AddSourceRequest) returns (SourceResponse){}
+  // 创建sink
+  rpc CreateSink(CreateSinkRequest) returns (CreateSinkResponse){
+    option (google.api.http) = {
+      post: "/dataflow/sink/create",
+      body: "*"
+    };
+  }
+}
+
+// 模板信息配置
+// 配置写入字段写入模板
+service Template {
+
+}
