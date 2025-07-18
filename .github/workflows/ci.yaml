@@ -1,0 +1,30 @@
+name: Image
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set version env
+        run: |
+          echo "IMAGE_ID=registry.cn-beijing.aliyuncs.com/biyao/public" >> $GITHUB_ENV
+          echo "VERSION=${GITHUB_REPOSITORY##*/}-${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+      - name: Log into registry
+        run: echo "416798gao" | docker login registry.cn-beijing.aliyuncs.com -u sdgaozhe@qq.com --password-stdin
+
+      - name: Build and push image
+        run: |
+          echo "Building image: $IMAGE_ID:$VERSION"
+          docker build . --file Dockerfile --tag $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+        env:
+          IMAGE_ID: ${{ env.IMAGE_ID }}
+          VERSION: ${{ env.VERSION }}

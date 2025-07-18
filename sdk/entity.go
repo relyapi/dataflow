@@ -54,7 +54,7 @@ var (
 )
 
 func getGRPCAddr() string {
-	addr := os.Getenv("DATAHUB_GRPC_ADDR")
+	addr := os.Getenv("DATAFLOW_GRPC_ADDRESS")
 	if addr == "" {
 		addr = "127.0.0.1:9000"
 	}
