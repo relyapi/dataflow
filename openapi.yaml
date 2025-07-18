@@ -4,9 +4,7 @@
 openapi: 3.0.3
 info:
     title: ConfigHub API
-    description: |-
-        添加数据源
-         1. 动态配置数据源
+    description: "添加数据源\r\n 1. 动态配置数据源"
     version: 0.0.1
 paths:
     /dataflow/sink/create:
