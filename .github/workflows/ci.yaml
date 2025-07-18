@@ -18,7 +18,7 @@ jobs:
           echo "VERSION=${GITHUB_REPOSITORY##*/}-${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Log into registry
-        run: echo "${{ vars.ALIYUN_REGISTRY_PASSWORD }}" | docker login registry.cn-beijing.aliyuncs.com -u ${{ vars.ALIYUN_REGISTRY_USERNAME }} --password-stdin
+        run: echo "${{ secrets.ALIYUN_REGISTRY_PASSWORD }}" | docker login registry.cn-beijing.aliyuncs.com -u ${{ secrets.ALIYUN_REGISTRY_USERNAME }} --password-stdin
 
       - name: Build and push image
         run: |
