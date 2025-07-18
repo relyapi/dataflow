@@ -37,8 +37,8 @@ jobs:
           password: ${{ secrets.REMOTE_PASSWORD }}
           script: |
             cd /root/deploy/dataflow
-            echo "Updating image version in docker-compose.yml..."
-            sed -i 's|registry.cn-beijing.aliyuncs.com/biyao/public:[^"]*|'"$IMAGE_ID:$VERSION"'|g' docker-compose.yml
+            echo "Updating image version in docker-compose.yaml..."
+            sed -i 's|registry.cn-beijing.aliyuncs.com/biyao/public:[^"]*|'"$IMAGE_ID:$VERSION"'|g' docker-compose.yaml
             docker compose pull
             docker compose up -d
         env:
