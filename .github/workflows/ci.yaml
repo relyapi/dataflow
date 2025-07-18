@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - dev
 
 jobs:
   release:
@@ -18,13 +17,30 @@ jobs:
           echo "VERSION=${GITHUB_REPOSITORY##*/}-${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Log into registry
-        run: echo "416798gao" | docker login registry.cn-beijing.aliyuncs.com -u sdgaozhe@qq.com --password-stdin
+        run: echo "${{ secrets.ALIYUN_REGISTRY_PASSWORD }}" | docker login ${{ secrets.ALIYUN_REGISTRY_HOSTNAME }} -u ${{ secrets.ALIYUN_REGISTRY_USERNAME }} --password-stdin
 
       - name: Build and push image
         run: |
           echo "Building image: $IMAGE_ID:$VERSION"
           docker build . --file Dockerfile --tag $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
+        env:
+          IMAGE_ID: ${{ env.IMAGE_ID }}
+          VERSION: ${{ env.VERSION }}
+
+      - name: Deploy to Remote Server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          password: ${{ secrets.REMOTE_PASSWORD }}
+          script: |
+            cd /root/deploy/dataflow
+            echo "Updating image version in docker-compose.yaml..."
+            echo "IMAGE_ID=${{ env.IMAGE_ID }}" > .env
+            echo "VERSION=${{ env.VERSION }}" >> .env
+            docker compose pull
+            docker compose up -d
         env:
           IMAGE_ID: ${{ env.IMAGE_ID }}
           VERSION: ${{ env.VERSION }}
