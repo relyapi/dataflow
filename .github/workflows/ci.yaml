@@ -38,7 +38,8 @@ jobs:
           script: |
             cd /root/deploy/dataflow
             echo "Updating image version in docker-compose.yaml..."
-            sed -i 's|registry.cn-beijing.aliyuncs.com/biyao/public:[^"]*|'"$IMAGE_ID:$VERSION"'|g' docker-compose.yaml
+            echo "IMAGE_ID=${{ env.IMAGE_ID }}" > .env
+            echo "VERSION=${{ env.VERSION }}" >> .env
             docker compose pull
             docker compose up -d
         env:
