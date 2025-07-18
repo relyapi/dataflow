@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         && rm -rf /var/lib/apt/lists/ \
         && apt-get autoremove -y && apt-get autoclean -y
 
-COPY --from=builder /src/bin /app
+COPY --from=builder /src/bin/server /app/server
 
 WORKDIR /app
 
