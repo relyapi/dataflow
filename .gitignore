@@ -5,6 +5,8 @@
 *.dll
 *.dylib
 
+releases/
+
 .idea/
 configs/config.yaml
 README_INNER.md

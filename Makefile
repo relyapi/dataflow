@@ -61,7 +61,8 @@ api:
 .PHONY: build
 # build
 build:
-	mkdir -p bin/ && go build -ldflags "-X main.Version=$(VERSION)" -o ./bin/ ./...
+	go vet .
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-X main.buildTime=`date +%Y%m%d.%H:%M:%S` -X main.buildCommit=`git rev-parse --short=12 HEAD` -X main.buildBranch=`git branch --show-current`" -o /src/bin/server .
 
 .PHONY: generate
 # generate
