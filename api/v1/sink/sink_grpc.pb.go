@@ -20,7 +20,6 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	DataHub_DoSink_FullMethodName = "/api.v1.sink.DataHub/DoSink"
-	DataHub_DoItem_FullMethodName = "/api.v1.sink.DataHub/DoItem"
 )
 
 // DataHubClient is the client API for DataHub service.
@@ -29,10 +28,8 @@ const (
 //
 // pipeline逻辑
 type DataHubClient interface {
-	// 接收任意数据类型
+	// 数据入库
 	DoSink(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[DoSinkRequest, Response], error)
-	// 接收定义好的 protobuf item 数据
-	DoItem(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[DoItemRequest, Response], error)
 }
 
 type dataHubClient struct {
@@ -56,29 +53,14 @@ func (c *dataHubClient) DoSink(ctx context.Context, opts ...grpc.CallOption) (gr
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type DataHub_DoSinkClient = grpc.ClientStreamingClient[DoSinkRequest, Response]
 
-func (c *dataHubClient) DoItem(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[DoItemRequest, Response], error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &DataHub_ServiceDesc.Streams[1], DataHub_DoItem_FullMethodName, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &grpc.GenericClientStream[DoItemRequest, Response]{ClientStream: stream}
-	return x, nil
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type DataHub_DoItemClient = grpc.ClientStreamingClient[DoItemRequest, Response]
-
 // DataHubServer is the server API for DataHub service.
 // All implementations must embed UnimplementedDataHubServer
 // for forward compatibility.
 //
 // pipeline逻辑
 type DataHubServer interface {
-	// 接收任意数据类型
+	// 数据入库
 	DoSink(grpc.ClientStreamingServer[DoSinkRequest, Response]) error
-	// 接收定义好的 protobuf item 数据
-	DoItem(grpc.ClientStreamingServer[DoItemRequest, Response]) error
 	mustEmbedUnimplementedDataHubServer()
 }
 
@@ -91,9 +73,6 @@ type UnimplementedDataHubServer struct{}
 
 func (UnimplementedDataHubServer) DoSink(grpc.ClientStreamingServer[DoSinkRequest, Response]) error {
 	return status.Errorf(codes.Unimplemented, "method DoSink not implemented")
-}
-func (UnimplementedDataHubServer) DoItem(grpc.ClientStreamingServer[DoItemRequest, Response]) error {
-	return status.Errorf(codes.Unimplemented, "method DoItem not implemented")
 }
 func (UnimplementedDataHubServer) mustEmbedUnimplementedDataHubServer() {}
 func (UnimplementedDataHubServer) testEmbeddedByValue()                 {}
@@ -123,13 +102,6 @@ func _DataHub_DoSink_Handler(srv interface{}, stream grpc.ServerStream) error {
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type DataHub_DoSinkServer = grpc.ClientStreamingServer[DoSinkRequest, Response]
 
-func _DataHub_DoItem_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(DataHubServer).DoItem(&grpc.GenericServerStream[DoItemRequest, Response]{ServerStream: stream})
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type DataHub_DoItemServer = grpc.ClientStreamingServer[DoItemRequest, Response]
-
 // DataHub_ServiceDesc is the grpc.ServiceDesc for DataHub service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -141,11 +113,6 @@ var DataHub_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "DoSink",
 			Handler:       _DataHub_DoSink_Handler,
-			ClientStreams: true,
-		},
-		{
-			StreamName:    "DoItem",
-			Handler:       _DataHub_DoItem_Handler,
 			ClientStreams: true,
 		},
 	},

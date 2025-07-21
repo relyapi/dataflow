@@ -37,13 +37,12 @@ type Metadata struct {
 
 // Record 表示一条数据 + 元信息
 type Record struct {
-	Item     any      `json:"data"`     // 实际数据内容
-	Metadata Metadata `json:"metadata"` // 源、url、时间等
+	Data     any      `json:"data"`
+	Metadata Metadata `json:"metadata"`
 }
 
 type ResultService struct {
 	sinkID    string
-	sinkType  sink.SinkType
 	sinkStub  sink.DataHubClient
 	batchSize int
 }
@@ -80,14 +79,13 @@ func getClient() (sink.DataHubClient, error) {
 	return stub, initErr
 }
 
-func NewResultService(sinkID string, sinkType sink.SinkType) (*ResultService, error) {
+func NewResultService(sinkID string) (*ResultService, error) {
 	client, err := getClient()
 	if err != nil {
 		return nil, err
 	}
 	return &ResultService{
 		sinkID:    sinkID,
-		sinkType:  sinkType,
 		sinkStub:  client,
 		batchSize: 100,
 	}, nil
@@ -108,7 +106,7 @@ func (r *ResultService) SaveItems(items []Record) error {
 	var batch []map[string]any
 	for _, item := range items {
 		record := make(map[string]any)
-		record["data"] = item.Item
+		record["data"] = item.Data
 		metaMap := metadataToMap(item.Metadata)
 		for k, v := range metaMap {
 			record[k] = v
@@ -149,9 +147,8 @@ func (r *ResultService) send(records []map[string]any) error {
 	}
 
 	if err := stream.Send(&sink.DoSinkRequest{
-		SinkId:   r.sinkID,
-		SinkType: r.sinkType,
-		Data:     data,
+		SinkId: r.sinkID,
+		Data:   data,
 	}); err != nil {
 		return err
 	}

@@ -12,9 +12,9 @@ func TestSave(t *testing.T) {
 	if err != nil {
 		log.Fatal("初始化失败:", err)
 	}
-
+	// [sink] item: {'data': {'name': 'xiaoming', 'age': 25, 'time': '2025-07-21 15:46:01', 'hello': 'world', 'world': 1121211}, 'source': '', 'url': 'https://www.json.cn9/', 'crawl_time': '2025-07-21 15:46:01'}
 	record := Record{
-		Item: map[string]any{
+		Data: map[string]any{
 			"name": "opentome",
 		},
 		Metadata: Metadata{

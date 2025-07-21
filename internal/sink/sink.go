@@ -59,7 +59,7 @@ func NewMongoSink(sinkInfo *flow.Sink) (DataHubSink, error) {
 	}
 
 	return &MongoSink{
-		database:  mongoClient.Database(sinkInfo.DbName),
+		database:  mongoClient.Database(sinkInfo.Source.DbName),
 		tableName: sinkInfo.TableName,
 	}, nil
 }
@@ -101,7 +101,7 @@ func NewZincSearchSink(sinkInfo *flow.Sink) (DataHubSink, error) {
 }
 
 func NewMysqlSink(sinkInfo *flow.Sink) (DataHubSink, error) {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=True&loc=Local", sinkInfo.Source.Username, sinkInfo.Source.Password, sinkInfo.Source.Host, sinkInfo.Source.Port, sinkInfo.DbName)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=True&loc=Local", sinkInfo.Source.Username, sinkInfo.Source.Password, sinkInfo.Source.Host, sinkInfo.Source.Port, sinkInfo.Source.DbName)
 
 	var db *gorm.DB
 	var err error
