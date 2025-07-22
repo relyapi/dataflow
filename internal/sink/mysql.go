@@ -16,6 +16,6 @@ type MysqlSink struct {
 func (mysqlSink *MysqlSink) Sink(resources []*utils.Resource) (err error) {
 	return mysqlSink.db.Table(mysqlSink.tableName).Clauses(clause.OnConflict{
 		Columns:   []clause.Column{{Name: "url_md5"}},
-		DoUpdates: clause.AssignmentColumns([]string{"url", "source", "data", "crawl_time"}),
+		DoUpdates: clause.AssignmentColumns([]string{"url", "data", "crawl_time"}),
 	}).Create(&resources).Error
 }

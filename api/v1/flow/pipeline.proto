@@ -22,8 +22,8 @@ message Source {
 message Sink {
   int32 id = 1 [(gogoproto.jsontag) = "id"];
   string sink_id = 2 [(gogoproto.jsontag) = "sink_id", (gogoproto.moretags) = "gorm:\"type:varchar(32);unique;not null;comment:sink_id\""];
-  string name = 3 [(gogoproto.jsontag) = "name", (gogoproto.moretags) = "gorm:\"type:varchar(50);not null;comment:sink名称\""];
-  string flag = 4 [(gogoproto.jsontag) = "flag", (gogoproto.moretags) = "gorm:\"type:varchar(50);not null;comment:flag：item、list、log、scrapy等\""];
+  string sink_type = 3 [(gogoproto.jsontag) = "sink_type", (gogoproto.moretags) = "gorm:\"type:varchar(50);not null;comment:sink_type：item、list、log、scrapy等\""];
+  string name = 4 [(gogoproto.jsontag) = "name", (gogoproto.moretags) = "gorm:\"type:varchar(50);not null;comment:sink名称\""];
   int32 source_id = 5 [(gogoproto.jsontag) = "source_id", (gogoproto.moretags) = "gorm:\"type:varchar(100);comment:外键ID\""];
   string table_name = 6 [(gogoproto.jsontag) = "db_table", (gogoproto.moretags) = "gorm:\"type:varchar(100);comment:数据表\""];
   string remark = 7 [(gogoproto.jsontag) = "remark", (gogoproto.moretags) = "gorm:\"type:text;comment:备注\""];
