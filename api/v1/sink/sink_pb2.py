@@ -25,7 +25,7 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import any_pb2 as google_dot_protobuf_dot_any__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x12v1/sink/sink.proto\x12\x0b\x61pi.v1.sink\x1a\x19google/protobuf/any.proto\"l\n\rDoItemRequest\x12\x0e\n\x06sinkId\x18\x01 \x01(\t\x12\'\n\x08sinkType\x18\x02 \x01(\x0e\x32\x15.api.v1.sink.SinkType\x12\"\n\x04\x64\x61ta\x18\x03 \x01(\x0b\x32\x14.google.protobuf.Any\"V\n\rDoSinkRequest\x12\x0e\n\x06sinkId\x18\x01 \x01(\t\x12\'\n\x08sinkType\x18\x02 \x01(\x0e\x32\x15.api.v1.sink.SinkType\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\x0c\"\x1a\n\x08Response\x12\x0e\n\x06status\x18\x01 \x01(\x08*+\n\x08SinkType\x12\n\n\x06INSERT\x10\x00\x12\n\n\x06UPDATE\x10\x01\x12\x07\n\x03LOG\x10\x02\x32\x8b\x01\n\x07\x44\x61taHub\x12?\n\x06\x44oSink\x12\x1a.api.v1.sink.DoSinkRequest\x1a\x15.api.v1.sink.Response\"\x00(\x01\x12?\n\x06\x44oItem\x12\x1a.api.v1.sink.DoItemRequest\x1a\x15.api.v1.sink.Response\"\x00(\x01\x42-Z+github.com/tomeai/dataflow/api/v1/sink;sinkb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x12v1/sink/sink.proto\x12\x0b\x61pi.v1.sink\x1a\x19google/protobuf/any.proto\"-\n\rDoSinkRequest\x12\x0e\n\x06sinkId\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\x0c\"\x1a\n\x08Response\x12\x0e\n\x06status\x18\x01 \x01(\x08\x32J\n\x07\x44\x61taHub\x12?\n\x06\x44oSink\x12\x1a.api.v1.sink.DoSinkRequest\x1a\x15.api.v1.sink.Response\"\x00(\x01\x42-Z+github.com/tomeai/dataflow/api/v1/sink;sinkb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -33,14 +33,10 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'v1.sink.sink_pb2', _globals
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'Z+github.com/tomeai/dataflow/api/v1/sink;sink'
-  _globals['_SINKTYPE']._serialized_start=288
-  _globals['_SINKTYPE']._serialized_end=331
-  _globals['_DOITEMREQUEST']._serialized_start=62
-  _globals['_DOITEMREQUEST']._serialized_end=170
-  _globals['_DOSINKREQUEST']._serialized_start=172
-  _globals['_DOSINKREQUEST']._serialized_end=258
-  _globals['_RESPONSE']._serialized_start=260
-  _globals['_RESPONSE']._serialized_end=286
-  _globals['_DATAHUB']._serialized_start=334
-  _globals['_DATAHUB']._serialized_end=473
+  _globals['_DOSINKREQUEST']._serialized_start=62
+  _globals['_DOSINKREQUEST']._serialized_end=107
+  _globals['_RESPONSE']._serialized_start=109
+  _globals['_RESPONSE']._serialized_end=135
+  _globals['_DATAHUB']._serialized_start=137
+  _globals['_DATAHUB']._serialized_end=211
 # @@protoc_insertion_point(module_scope)

@@ -44,7 +44,8 @@ func NewSinkService(itemSvc ItemRepo, logger log.Logger) *SinkService {
 					loggerHelper.Error(err)
 				}
 				sinkService.SinkMap.Store(item.SinkId, dataSink)
-			//case "elasticsearch":
+			case "cos":
+				// 腾讯云对象存储
 			default:
 				loggerHelper.Info("not support sink type")
 			}

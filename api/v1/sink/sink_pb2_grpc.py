@@ -40,11 +40,6 @@ class DataHubStub(object):
                 request_serializer=v1_dot_sink_dot_sink__pb2.DoSinkRequest.SerializeToString,
                 response_deserializer=v1_dot_sink_dot_sink__pb2.Response.FromString,
                 _registered_method=True)
-        self.DoItem = channel.stream_unary(
-                '/api.v1.sink.DataHub/DoItem',
-                request_serializer=v1_dot_sink_dot_sink__pb2.DoItemRequest.SerializeToString,
-                response_deserializer=v1_dot_sink_dot_sink__pb2.Response.FromString,
-                _registered_method=True)
 
 
 class DataHubServicer(object):
@@ -52,14 +47,7 @@ class DataHubServicer(object):
     """
 
     def DoSink(self, request_iterator, context):
-        """接收任意数据类型
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def DoItem(self, request_iterator, context):
-        """接收定义好的 protobuf item 数据
+        """数据入库
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -71,11 +59,6 @@ def add_DataHubServicer_to_server(servicer, server):
             'DoSink': grpc.stream_unary_rpc_method_handler(
                     servicer.DoSink,
                     request_deserializer=v1_dot_sink_dot_sink__pb2.DoSinkRequest.FromString,
-                    response_serializer=v1_dot_sink_dot_sink__pb2.Response.SerializeToString,
-            ),
-            'DoItem': grpc.stream_unary_rpc_method_handler(
-                    servicer.DoItem,
-                    request_deserializer=v1_dot_sink_dot_sink__pb2.DoItemRequest.FromString,
                     response_serializer=v1_dot_sink_dot_sink__pb2.Response.SerializeToString,
             ),
     }
@@ -106,33 +89,6 @@ class DataHub(object):
             target,
             '/api.v1.sink.DataHub/DoSink',
             v1_dot_sink_dot_sink__pb2.DoSinkRequest.SerializeToString,
-            v1_dot_sink_dot_sink__pb2.Response.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
-    def DoItem(request_iterator,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.stream_unary(
-            request_iterator,
-            target,
-            '/api.v1.sink.DataHub/DoItem',
-            v1_dot_sink_dot_sink__pb2.DoItemRequest.SerializeToString,
             v1_dot_sink_dot_sink__pb2.Response.FromString,
             options,
             channel_credentials,

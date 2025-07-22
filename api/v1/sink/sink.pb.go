@@ -9,7 +9,7 @@ package sink
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	anypb "google.golang.org/protobuf/types/known/anypb"
+	_ "google.golang.org/protobuf/types/known/anypb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -22,135 +22,19 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type SinkType int32
-
-const (
-	// 直接插入
-	SinkType_INSERT SinkType = 0
-	// 根据指定ID更新
-	SinkType_UPDATE SinkType = 1
-	// log数据
-	SinkType_LOG SinkType = 2
-)
-
-// Enum value maps for SinkType.
-var (
-	SinkType_name = map[int32]string{
-		0: "INSERT",
-		1: "UPDATE",
-		2: "LOG",
-	}
-	SinkType_value = map[string]int32{
-		"INSERT": 0,
-		"UPDATE": 1,
-		"LOG":    2,
-	}
-)
-
-func (x SinkType) Enum() *SinkType {
-	p := new(SinkType)
-	*p = x
-	return p
-}
-
-func (x SinkType) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (SinkType) Descriptor() protoreflect.EnumDescriptor {
-	return file_v1_sink_sink_proto_enumTypes[0].Descriptor()
-}
-
-func (SinkType) Type() protoreflect.EnumType {
-	return &file_v1_sink_sink_proto_enumTypes[0]
-}
-
-func (x SinkType) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use SinkType.Descriptor instead.
-func (SinkType) EnumDescriptor() ([]byte, []int) {
-	return file_v1_sink_sink_proto_rawDescGZIP(), []int{0}
-}
-
-// 小爬虫专用（接收数据）
-type DoItemRequest struct {
-	state  protoimpl.MessageState `protogen:"open.v1"`
-	SinkId string                 `protobuf:"bytes,1,opt,name=sinkId,proto3" json:"sinkId,omitempty"`
-	// 数据类型
-	SinkType SinkType `protobuf:"varint,2,opt,name=sinkType,proto3,enum=api.v1.sink.SinkType" json:"sinkType,omitempty"`
-	// Data
-	Data          *anypb.Any `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *DoItemRequest) Reset() {
-	*x = DoItemRequest{}
-	mi := &file_v1_sink_sink_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *DoItemRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DoItemRequest) ProtoMessage() {}
-
-func (x *DoItemRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_sink_sink_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DoItemRequest.ProtoReflect.Descriptor instead.
-func (*DoItemRequest) Descriptor() ([]byte, []int) {
-	return file_v1_sink_sink_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *DoItemRequest) GetSinkId() string {
-	if x != nil {
-		return x.SinkId
-	}
-	return ""
-}
-
-func (x *DoItemRequest) GetSinkType() SinkType {
-	if x != nil {
-		return x.SinkType
-	}
-	return SinkType_INSERT
-}
-
-func (x *DoItemRequest) GetData() *anypb.Any {
-	if x != nil {
-		return x.Data
-	}
-	return nil
-}
-
+// 爬虫数据存储
 type DoSinkRequest struct {
 	state  protoimpl.MessageState `protogen:"open.v1"`
 	SinkId string                 `protobuf:"bytes,1,opt,name=sinkId,proto3" json:"sinkId,omitempty"`
-	// 数据类型
-	SinkType SinkType `protobuf:"varint,2,opt,name=sinkType,proto3,enum=api.v1.sink.SinkType" json:"sinkType,omitempty"`
 	// 元数据隐藏在data里面
-	Data          []byte `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	Data          []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *DoSinkRequest) Reset() {
 	*x = DoSinkRequest{}
-	mi := &file_v1_sink_sink_proto_msgTypes[1]
+	mi := &file_v1_sink_sink_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -162,7 +46,7 @@ func (x *DoSinkRequest) String() string {
 func (*DoSinkRequest) ProtoMessage() {}
 
 func (x *DoSinkRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_sink_sink_proto_msgTypes[1]
+	mi := &file_v1_sink_sink_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -175,7 +59,7 @@ func (x *DoSinkRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DoSinkRequest.ProtoReflect.Descriptor instead.
 func (*DoSinkRequest) Descriptor() ([]byte, []int) {
-	return file_v1_sink_sink_proto_rawDescGZIP(), []int{1}
+	return file_v1_sink_sink_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *DoSinkRequest) GetSinkId() string {
@@ -183,13 +67,6 @@ func (x *DoSinkRequest) GetSinkId() string {
 		return x.SinkId
 	}
 	return ""
-}
-
-func (x *DoSinkRequest) GetSinkType() SinkType {
-	if x != nil {
-		return x.SinkType
-	}
-	return SinkType_INSERT
 }
 
 func (x *DoSinkRequest) GetData() []byte {
@@ -208,7 +85,7 @@ type Response struct {
 
 func (x *Response) Reset() {
 	*x = Response{}
-	mi := &file_v1_sink_sink_proto_msgTypes[2]
+	mi := &file_v1_sink_sink_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -220,7 +97,7 @@ func (x *Response) String() string {
 func (*Response) ProtoMessage() {}
 
 func (x *Response) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_sink_sink_proto_msgTypes[2]
+	mi := &file_v1_sink_sink_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -233,7 +110,7 @@ func (x *Response) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Response.ProtoReflect.Descriptor instead.
 func (*Response) Descriptor() ([]byte, []int) {
-	return file_v1_sink_sink_proto_rawDescGZIP(), []int{2}
+	return file_v1_sink_sink_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Response) GetStatus() bool {
@@ -247,26 +124,14 @@ var File_v1_sink_sink_proto protoreflect.FileDescriptor
 
 const file_v1_sink_sink_proto_rawDesc = "" +
 	"\n" +
-	"\x12v1/sink/sink.proto\x12\vapi.v1.sink\x1a\x19google/protobuf/any.proto\"\x84\x01\n" +
-	"\rDoItemRequest\x12\x16\n" +
-	"\x06sinkId\x18\x01 \x01(\tR\x06sinkId\x121\n" +
-	"\bsinkType\x18\x02 \x01(\x0e2\x15.api.v1.sink.SinkTypeR\bsinkType\x12(\n" +
-	"\x04data\x18\x03 \x01(\v2\x14.google.protobuf.AnyR\x04data\"n\n" +
+	"\x12v1/sink/sink.proto\x12\vapi.v1.sink\x1a\x19google/protobuf/any.proto\";\n" +
 	"\rDoSinkRequest\x12\x16\n" +
-	"\x06sinkId\x18\x01 \x01(\tR\x06sinkId\x121\n" +
-	"\bsinkType\x18\x02 \x01(\x0e2\x15.api.v1.sink.SinkTypeR\bsinkType\x12\x12\n" +
-	"\x04data\x18\x03 \x01(\fR\x04data\"\"\n" +
+	"\x06sinkId\x18\x01 \x01(\tR\x06sinkId\x12\x12\n" +
+	"\x04data\x18\x02 \x01(\fR\x04data\"\"\n" +
 	"\bResponse\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status*+\n" +
-	"\bSinkType\x12\n" +
-	"\n" +
-	"\x06INSERT\x10\x00\x12\n" +
-	"\n" +
-	"\x06UPDATE\x10\x01\x12\a\n" +
-	"\x03LOG\x10\x022\x8b\x01\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status2J\n" +
 	"\aDataHub\x12?\n" +
-	"\x06DoSink\x12\x1a.api.v1.sink.DoSinkRequest\x1a\x15.api.v1.sink.Response\"\x00(\x01\x12?\n" +
-	"\x06DoItem\x12\x1a.api.v1.sink.DoItemRequest\x1a\x15.api.v1.sink.Response\"\x00(\x01B-Z+github.com/tomeai/dataflow/api/v1/sink;sinkb\x06proto3"
+	"\x06DoSink\x12\x1a.api.v1.sink.DoSinkRequest\x1a\x15.api.v1.sink.Response\"\x00(\x01B-Z+github.com/tomeai/dataflow/api/v1/sink;sinkb\x06proto3"
 
 var (
 	file_v1_sink_sink_proto_rawDescOnce sync.Once
@@ -280,28 +145,19 @@ func file_v1_sink_sink_proto_rawDescGZIP() []byte {
 	return file_v1_sink_sink_proto_rawDescData
 }
 
-var file_v1_sink_sink_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_v1_sink_sink_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_v1_sink_sink_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_v1_sink_sink_proto_goTypes = []any{
-	(SinkType)(0),         // 0: api.v1.sink.SinkType
-	(*DoItemRequest)(nil), // 1: api.v1.sink.DoItemRequest
-	(*DoSinkRequest)(nil), // 2: api.v1.sink.DoSinkRequest
-	(*Response)(nil),      // 3: api.v1.sink.Response
-	(*anypb.Any)(nil),     // 4: google.protobuf.Any
+	(*DoSinkRequest)(nil), // 0: api.v1.sink.DoSinkRequest
+	(*Response)(nil),      // 1: api.v1.sink.Response
 }
 var file_v1_sink_sink_proto_depIdxs = []int32{
-	0, // 0: api.v1.sink.DoItemRequest.sinkType:type_name -> api.v1.sink.SinkType
-	4, // 1: api.v1.sink.DoItemRequest.data:type_name -> google.protobuf.Any
-	0, // 2: api.v1.sink.DoSinkRequest.sinkType:type_name -> api.v1.sink.SinkType
-	2, // 3: api.v1.sink.DataHub.DoSink:input_type -> api.v1.sink.DoSinkRequest
-	1, // 4: api.v1.sink.DataHub.DoItem:input_type -> api.v1.sink.DoItemRequest
-	3, // 5: api.v1.sink.DataHub.DoSink:output_type -> api.v1.sink.Response
-	3, // 6: api.v1.sink.DataHub.DoItem:output_type -> api.v1.sink.Response
-	5, // [5:7] is the sub-list for method output_type
-	3, // [3:5] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	0, // 0: api.v1.sink.DataHub.DoSink:input_type -> api.v1.sink.DoSinkRequest
+	1, // 1: api.v1.sink.DataHub.DoSink:output_type -> api.v1.sink.Response
+	1, // [1:2] is the sub-list for method output_type
+	0, // [0:1] is the sub-list for method input_type
+	0, // [0:0] is the sub-list for extension type_name
+	0, // [0:0] is the sub-list for extension extendee
+	0, // [0:0] is the sub-list for field type_name
 }
 
 func init() { file_v1_sink_sink_proto_init() }
@@ -314,14 +170,13 @@ func file_v1_sink_sink_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_sink_sink_proto_rawDesc), len(file_v1_sink_sink_proto_rawDesc)),
-			NumEnums:      1,
-			NumMessages:   3,
+			NumEnums:      0,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_v1_sink_sink_proto_goTypes,
 		DependencyIndexes: file_v1_sink_sink_proto_depIdxs,
-		EnumInfos:         file_v1_sink_sink_proto_enumTypes,
 		MessageInfos:      file_v1_sink_sink_proto_msgTypes,
 	}.Build()
 	File_v1_sink_sink_proto = out.File

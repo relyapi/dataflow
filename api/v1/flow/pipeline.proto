@@ -14,19 +14,20 @@ message Source {
   int32 port = 4 [(gogoproto.jsontag) = "port", (gogoproto.moretags) = "gorm:\"comment:端口\""];
   string username = 5 [(gogoproto.jsontag) = "username", (gogoproto.moretags) = "gorm:\"type:varchar(50);comment:数据库用户名\""];
   string password = 6 [(gogoproto.jsontag) = "password", (gogoproto.moretags) = "gorm:\"type:varchar(50);not null;comment:数据库密码\""];
-  string remark = 7 [(gogoproto.jsontag) = "remark", (gogoproto.moretags) = "gorm:\"type:text;comment:备注\""];
+  string db_name = 7 [(gogoproto.jsontag) = "db_name", (gogoproto.moretags) = "gorm:\"type:varchar(100);comment:数据库\""];
+  string remark = 8 [(gogoproto.jsontag) = "remark", (gogoproto.moretags) = "gorm:\"type:text;comment:备注\""];
 }
 
 // Sink 数据存储
 message Sink {
   int32 id = 1 [(gogoproto.jsontag) = "id"];
-  string sink_id = 8 [(gogoproto.jsontag) = "sink_id", (gogoproto.moretags) = "gorm:\"type:varchar(32);unique;not null;comment:sink_id\""];
-  string name = 2 [(gogoproto.jsontag) = "name", (gogoproto.moretags) = "gorm:\"type:varchar(50);not null;comment:sink名称\""];
-  int32 source_id = 3 [(gogoproto.jsontag) = "source_id", (gogoproto.moretags) = "gorm:\"type:varchar(100);comment:外键ID\""];
-  string db_name = 4 [(gogoproto.jsontag) = "db_name", (gogoproto.moretags) = "gorm:\"type:varchar(100);comment:数据库\""];
-  string table_name = 5 [(gogoproto.jsontag) = "db_table", (gogoproto.moretags) = "gorm:\"type:varchar(100);comment:数据表\""];
-  string remark = 6 [(gogoproto.jsontag) = "remark", (gogoproto.moretags) = "gorm:\"type:text;comment:备注\""];
+  string sink_id = 2 [(gogoproto.jsontag) = "sink_id", (gogoproto.moretags) = "gorm:\"type:varchar(32);unique;not null;comment:sink_id\""];
+  string name = 3 [(gogoproto.jsontag) = "name", (gogoproto.moretags) = "gorm:\"type:varchar(50);not null;comment:sink名称\""];
+  string flag = 4 [(gogoproto.jsontag) = "flag", (gogoproto.moretags) = "gorm:\"type:varchar(50);not null;comment:flag：item、list、log、scrapy等\""];
+  int32 source_id = 5 [(gogoproto.jsontag) = "source_id", (gogoproto.moretags) = "gorm:\"type:varchar(100);comment:外键ID\""];
+  string table_name = 6 [(gogoproto.jsontag) = "db_table", (gogoproto.moretags) = "gorm:\"type:varchar(100);comment:数据表\""];
+  string remark = 7 [(gogoproto.jsontag) = "remark", (gogoproto.moretags) = "gorm:\"type:text;comment:备注\""];
 
   // 必须指定一个source源
-  Source source = 7 [(gogoproto.jsontag) = "sink_source", (gogoproto.moretags) = "gorm:\"foreignKey:source_id\""];
+  Source source = 8 [(gogoproto.jsontag) = "sink_source", (gogoproto.moretags) = "gorm:\"foreignKey:source_id\""];
 }

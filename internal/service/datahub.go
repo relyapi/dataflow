@@ -8,7 +8,6 @@ import (
 	"github.com/tomeai/dataflow/api/v1/sink"
 	"github.com/tomeai/dataflow/internal/biz"
 	"github.com/tomeai/dataflow/internal/utils"
-	"google.golang.org/grpc"
 	"io"
 	"strings"
 )
@@ -29,11 +28,8 @@ func (dataSvc *DataServiceManager) deserialize(msg *sink.DoSinkRequest) (data []
 	for _, item := range data {
 		if item != nil {
 			item.SinkId = msg.GetSinkId()
-			item.SinkType = msg.GetSinkType()
 			if item.Url == "" {
-				item.UrlMd5 = uuid.New().String()
-				item.UrlMd5 = uuid.New().String()
-				item.UrlMd5 = strings.ReplaceAll(item.UrlMd5, "-", "")
+				item.UrlMd5 = strings.ReplaceAll(uuid.New().String(), "-", "")
 			} else {
 				item.UrlMd5 = utils.CalcMD5(item.Url)
 			}
@@ -76,9 +72,4 @@ func (dataSvc *DataServiceManager) DoSink(stream sink.DataHub_DoSinkServer) erro
 			return err
 		}
 	}
-}
-
-func (dataSvc *DataServiceManager) DoItem(g grpc.ClientStreamingServer[sink.DoItemRequest, sink.Response]) error {
-	// 来自golang标准的数据
-	panic("implement me")
 }
