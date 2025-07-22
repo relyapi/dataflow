@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"log"
 	"os"
-	"reflect"
 	"sync"
 	"time"
 
@@ -14,33 +13,12 @@ import (
 	"github.com/tomeai/dataflow/api/v1/sink"
 )
 
-func metadataToMap(meta Metadata) map[string]interface{} {
-	if meta.CrawlTime == "" {
-		meta.CrawlTime = time.Now().Format("2006-01-02 15:04:05")
-	}
-	result := make(map[string]interface{})
-	v := reflect.ValueOf(meta)
-	t := reflect.TypeOf(meta)
-
-	for i := 0; i < t.NumField(); i++ {
-		key := t.Field(i).Tag.Get("json")
-		if key == "" {
-			key = t.Field(i).Name
-		}
-		result[key] = v.Field(i).Interface()
-	}
-	return result
-}
-
-type Metadata struct {
-	Url       string `json:"url"`
-	CrawlTime string `json:"crawl_time"`
-}
-
 // Record 表示一条数据 + 元信息
 type Record struct {
-	Data     any      `json:"data"`
-	Metadata Metadata `json:"metadata"`
+	StoreKey  string `json:"store_key"`
+	Data      any    `json:"data"`
+	CrawlTime string `json:"crawl_time"`
+	Metadata  any    `json:"metadata"`
 }
 
 type ResultService struct {
@@ -105,16 +83,14 @@ func (r *ResultService) SaveItems(items []Record) error {
 		return nil
 	}
 
-	var batch []map[string]any
+	var batch []Record
 	for _, item := range items {
-		record := make(map[string]any)
-		record["data"] = item.Data
-		metaMap := metadataToMap(item.Metadata)
-		for k, v := range metaMap {
-			record[k] = v
+		if item.CrawlTime == "" {
+			item.CrawlTime = time.Now().Format("2006-01-02 15:04:05")
 		}
-		log.Printf("[sink] item: %+v\n", record)
-		batch = append(batch, record)
+
+		log.Printf("[sink] item: %+v\n", item)
+		batch = append(batch, item)
 
 		if len(batch) >= r.batchSize {
 			if err := r.send(batch); err != nil {
@@ -134,7 +110,7 @@ func (r *ResultService) SaveItems(items []Record) error {
 }
 
 // 实际发送方法（JSON 序列化 + DoSink）
-func (r *ResultService) send(records []map[string]any) error {
+func (r *ResultService) send(records []Record) error {
 	data, err := json.Marshal(records)
 	if err != nil {
 		return err

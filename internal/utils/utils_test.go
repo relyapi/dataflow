@@ -21,3 +21,13 @@ func TestDecryptAES(t *testing.T) {
 	}
 	fmt.Println(result)
 }
+
+func TestAny(t *testing.T) {
+	data := map[string]any{
+		"name": "gage",
+	}
+
+	for k, v := range data {
+		fmt.Println(k, v)
+	}
+}

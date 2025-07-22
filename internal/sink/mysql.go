@@ -15,7 +15,8 @@ type MysqlSink struct {
 
 func (mysqlSink *MysqlSink) Sink(resources []*utils.Resource) (err error) {
 	return mysqlSink.db.Table(mysqlSink.tableName).Clauses(clause.OnConflict{
-		Columns:   []clause.Column{{Name: "url_md5"}},
-		DoUpdates: clause.AssignmentColumns([]string{"url", "data", "crawl_time"}),
+		Columns: []clause.Column{{Name: "store_id"}},
+		// 一旦创建不允许更新 sink_id和sink_type
+		DoUpdates: clause.AssignmentColumns([]string{"store_key", "data", "metadata", "crawl_time"}),
 	}).Create(&resources).Error
 }
