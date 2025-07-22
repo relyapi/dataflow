@@ -28,10 +28,10 @@ func (dataSvc *DataServiceManager) deserialize(msg *sink.DoSinkRequest) (data []
 	for _, item := range data {
 		if item != nil {
 			item.SinkId = msg.GetSinkId()
-			if item.Url == "" {
-				item.UrlMd5 = strings.ReplaceAll(uuid.New().String(), "-", "")
+			if item.StoreKey == "" {
+				item.StoreId = strings.ReplaceAll(uuid.New().String(), "-", "")
 			} else {
-				item.UrlMd5 = utils.CalcMD5(item.Url)
+				item.StoreId = utils.CalcMD5(item.StoreKey)
 			}
 		}
 	}

@@ -12,11 +12,16 @@ type Resource struct {
 
 	// 唯一标识
 	// 数据库upsert唯一key,如果url为空，取uuid替代
-	UrlMd5 string `json:"url_md5"`
-	// 采集连接
-	Url string `json:"url"`
+	StoreId string `json:"store_id"`
+	// 采集连接 url或者key
+	StoreKey string `json:"store_key"`
+
+	// 采集数据
+	Data json.RawMessage `json:"data"`
+
+	// 元数据
+	Metadata json.RawMessage `json:"metadata"`
+
 	// 采集时间
 	CrawlTime string `json:"crawl_time"`
-	// 数据
-	Data json.RawMessage `json:"data"`
 }

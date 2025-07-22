@@ -17,7 +17,6 @@ func NewSinkService(itemSvc ItemRepo, logger log.Logger) *SinkService {
 	}
 
 	// 从数据库初始化
-	// todo: 抽离单独的配置服务  创建还原sink
 	sinkResults, err := itemSvc.GetAllSink(context.Background())
 	if err != nil {
 		loggerHelper.Fatalf("GetSink err: %v", err)
@@ -27,25 +26,30 @@ func NewSinkService(itemSvc ItemRepo, logger log.Logger) *SinkService {
 		if item.SinkId != "" {
 			switch item.Source.Type {
 			case "mysql":
-				dataSink, err := sink.NewMysqlSink(item)
+				dataSink, err := sink.NewMysqlSink(item, logger)
 				if err != nil {
 					loggerHelper.Error(err)
 				}
 				sinkService.SinkMap.Store(item.SinkId, dataSink)
 			case "mongo":
-				dataSink, err := sink.NewMongoSink(item)
+				dataSink, err := sink.NewMongoSink(item, logger)
 				if err != nil {
 					loggerHelper.Error(err)
 				}
 				sinkService.SinkMap.Store(item.SinkId, dataSink)
 			case "zincsearch":
-				dataSink, err := sink.NewZincSearchSink(item)
+				dataSink, err := sink.NewZincSearchSink(item, logger)
 				if err != nil {
 					loggerHelper.Error(err)
 				}
 				sinkService.SinkMap.Store(item.SinkId, dataSink)
 			case "cos":
 				// 腾讯云对象存储
+				dataSink, err := sink.NewCosSink(item, logger)
+				if err != nil {
+					loggerHelper.Error(err)
+				}
+				sinkService.SinkMap.Store(item.SinkId, dataSink)
 			default:
 				loggerHelper.Info("not support sink type")
 			}

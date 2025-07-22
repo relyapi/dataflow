@@ -2,9 +2,13 @@ package sink
 
 import (
 	"context"
+	"github.com/go-kratos/kratos/v2/log"
+	"github.com/tencentyun/cos-go-sdk-v5"
 	"github.com/tomeai/dataflow/api/v1/flow"
 	"github.com/tomeai/dataflow/internal/conf"
 	"github.com/tomeai/dataflow/internal/utils"
+
+	"net/url"
 
 	"encoding/base64"
 	"fmt"
@@ -14,7 +18,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"log"
+
 	"net/http"
 	"time"
 )
@@ -31,7 +35,9 @@ func (source *SourceStrategy) setStrategy(sinkProvider DataHubSink) {
 	source.sinkProvider = sinkProvider
 }
 
-func NewMongoSink(sinkInfo *flow.Sink) (DataHubSink, error) {
+func NewMongoSink(sinkInfo *flow.Sink, logger log.Logger) (DataHubSink, error) {
+	loggerHelper := log.NewHelper(log.With(logger, "module", "sink/mongodb"))
+
 	uri := fmt.Sprintf("mongodb://%s:%s@%s:%s/?authSource=admin", sinkInfo.Source.Username, sinkInfo.Source.Password, sinkInfo.Source.Host, sinkInfo.Source.Port)
 	clientOpts := options.Client().ApplyURI(uri)
 
@@ -61,6 +67,7 @@ func NewMongoSink(sinkInfo *flow.Sink) (DataHubSink, error) {
 	return &MongoSink{
 		database:  mongoClient.Database(sinkInfo.Source.DbName),
 		tableName: sinkInfo.TableName,
+		log:       loggerHelper,
 	}, nil
 }
 
@@ -74,7 +81,9 @@ func (a *authTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	return a.wrapped.RoundTrip(req)
 }
 
-func NewZincSearchSink(sinkInfo *flow.Sink) (DataHubSink, error) {
+func NewZincSearchSink(sinkInfo *flow.Sink, logger log.Logger) (DataHubSink, error) {
+	loggerHelper := log.NewHelper(log.With(logger, "module", "sink/zincsearch"))
+
 	basicAuth := "Basic " + base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", sinkInfo.Source.Username, sinkInfo.Source.Password)))
 
 	httpClient := &http.Client{
@@ -97,10 +106,12 @@ func NewZincSearchSink(sinkInfo *flow.Sink) (DataHubSink, error) {
 	return &ZincSearchSink{
 		zincDocument: apiClient.Document,
 		tableName:    sinkInfo.TableName,
+		log:          loggerHelper,
 	}, nil
 }
 
-func NewMysqlSink(sinkInfo *flow.Sink) (DataHubSink, error) {
+func NewMysqlSink(sinkInfo *flow.Sink, logger log.Logger) (DataHubSink, error) {
+	loggerHelper := log.NewHelper(log.With(logger, "module", "sink/mysql"))
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=True&loc=Local", sinkInfo.Source.Username, sinkInfo.Source.Password, sinkInfo.Source.Host, sinkInfo.Source.Port, sinkInfo.Source.DbName)
 
 	var db *gorm.DB
@@ -121,7 +132,7 @@ func NewMysqlSink(sinkInfo *flow.Sink) (DataHubSink, error) {
 		retryOp,
 		boCtx,
 		func(err error, d time.Duration) {
-			log.Printf("MySQL 连接失败，%s 后重试：%v", d, err)
+			loggerHelper.Infof("MySQL 连接失败，%s 后重试：%v", d, err)
 		},
 	)
 
@@ -130,11 +141,32 @@ func NewMysqlSink(sinkInfo *flow.Sink) (DataHubSink, error) {
 	}
 
 	if err := db.Exec(fmt.Sprintf(conf.MysqlDSL, sinkInfo.TableName)).Error; err != nil {
-		log.Printf("MySQL %s %v", sinkInfo.TableName, err)
+		loggerHelper.Infof("MySQL %s %v", sinkInfo.TableName, err)
 	}
 
 	return &MysqlSink{
 		db:        db,
 		tableName: sinkInfo.TableName,
+		log:       loggerHelper,
+	}, nil
+}
+
+func NewCosSink(sinkInfo *flow.Sink, logger log.Logger) (DataHubSink, error) {
+	loggerHelper := log.NewHelper(log.With(logger, "module", "sink/cos"))
+
+	u, err := url.Parse(sinkInfo.Source.Host)
+	if err != nil {
+		return nil, err
+	}
+	b := &cos.BaseURL{BucketURL: u}
+	return &CosSink{
+		threadPool: 5,
+		log:        loggerHelper,
+		cosClient: cos.NewClient(b, &http.Client{
+			Transport: &cos.AuthorizationTransport{
+				SecretID:  sinkInfo.Source.Username,
+				SecretKey: sinkInfo.Source.Password,
+			},
+		}),
 	}, nil
 }
