@@ -3,6 +3,8 @@ FROM golang:1.24 AS builder
 COPY . /src
 WORKDIR /src
 
+RUN make all
+
 RUN make build
 
 FROM debian:stable-slim

@@ -15,6 +15,9 @@ import (
 )
 
 func metadataToMap(meta Metadata) map[string]interface{} {
+	if meta.CrawlTime == "" {
+		meta.CrawlTime = time.Now().Format("2006-01-02 15:04:05")
+	}
 	result := make(map[string]interface{})
 	v := reflect.ValueOf(meta)
 	t := reflect.TypeOf(meta)
@@ -30,7 +33,6 @@ func metadataToMap(meta Metadata) map[string]interface{} {
 }
 
 type Metadata struct {
-	Source    string `json:"source"`
 	Url       string `json:"url"`
 	CrawlTime string `json:"crawl_time"`
 }
