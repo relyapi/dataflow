@@ -3,8 +3,8 @@ package biz
 import (
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/tomeai/dataflow/internal/model"
 	"github.com/tomeai/dataflow/internal/sink"
-	"github.com/tomeai/dataflow/internal/utils"
 	"sync"
 )
 
@@ -13,7 +13,7 @@ type SinkService struct {
 	log     *log.Helper
 }
 
-func (sinkSvc *SinkService) InsertData(sinkId string, resources []*utils.Resource) error {
+func (sinkSvc *SinkService) InsertData(sinkId string, resources []*model.Resource) error {
 	// 根据 sink_id 查询对应的库名和表名
 	if value, ok := sinkSvc.SinkMap.Load(sinkId); ok {
 		sinkInfo := value.(sink.DataHubSink)

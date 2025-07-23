@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/tomeai/dataflow/internal/utils"
+	"github.com/tomeai/dataflow/internal/model"
 	"go.mongodb.org/mongo-driver/mongo"
 	"time"
 )
@@ -15,7 +15,7 @@ type MongoSink struct {
 	log       *log.Helper
 }
 
-func (ms *MongoSink) convertData(data []*utils.Resource) []interface{} {
+func (ms *MongoSink) convertData(data []*model.Resource) []interface{} {
 	var result []interface{}
 	for _, item := range data {
 		result = append(result, item)
@@ -23,7 +23,7 @@ func (ms *MongoSink) convertData(data []*utils.Resource) []interface{} {
 	return result
 }
 
-func (ms *MongoSink) Sink(resources []*utils.Resource) (err error) {
+func (ms *MongoSink) Sink(resources []*model.Resource) (err error) {
 	// 根据 sink_type 判断是新增还是更新
 	defer func() {
 		if r := recover(); r != nil {

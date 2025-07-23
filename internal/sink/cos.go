@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/tencentyun/cos-go-sdk-v5"
-	"github.com/tomeai/dataflow/internal/utils"
+	"github.com/tomeai/dataflow/internal/model"
 	"net/http"
 	"sync"
 	"time"
@@ -21,13 +21,13 @@ type CosSink struct {
 }
 
 // Sink 启动并发上传
-func (cosSink *CosSink) Sink(resources []*utils.Resource) error {
+func (cosSink *CosSink) Sink(resources []*model.Resource) error {
 	return cosSink.batchUpload(resources)
 }
 
 // 并发上传
-func (cosSink *CosSink) batchUpload(resources []*utils.Resource) error {
-	resourceCh := make(chan *utils.Resource, len(resources))
+func (cosSink *CosSink) batchUpload(resources []*model.Resource) error {
+	resourceCh := make(chan *model.Resource, len(resources))
 	var wg sync.WaitGroup
 
 	// 启动 worker goroutines
@@ -54,7 +54,7 @@ func (cosSink *CosSink) batchUpload(resources []*utils.Resource) error {
 }
 
 // 实际上传逻辑
-func (cosSink *CosSink) uploadResource(res *utils.Resource) error {
+func (cosSink *CosSink) uploadResource(res *model.Resource) error {
 	// 	key := "folder/" + res.FileName
 
 	var metadataMap map[string]string

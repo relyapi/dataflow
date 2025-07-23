@@ -5,9 +5,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/tencentyun/cos-go-sdk-v5"
 	"github.com/tomeai/dataflow/api/v1/flow"
-	"github.com/tomeai/dataflow/internal/conf"
-	"github.com/tomeai/dataflow/internal/utils"
-
+	"github.com/tomeai/dataflow/internal/model"
 	"net/url"
 
 	"encoding/base64"
@@ -24,7 +22,7 @@ import (
 )
 
 type DataHubSink interface {
-	Sink(resources []*utils.Resource) (err error)
+	Sink(resources []*model.Resource) (err error)
 }
 
 type SourceStrategy struct {
@@ -140,7 +138,7 @@ func NewMysqlSink(sinkInfo *flow.Sink, logger log.Logger) (DataHubSink, error) {
 		return nil, fmt.Errorf("连接 MySQL 失败: %w", err)
 	}
 
-	if err := db.Exec(fmt.Sprintf(conf.MysqlDSL, sinkInfo.TableName)).Error; err != nil {
+	if err := db.Exec(fmt.Sprintf(model.MysqlDSL, sinkInfo.TableName)).Error; err != nil {
 		loggerHelper.Infof("MySQL %s %v", sinkInfo.TableName, err)
 	}
 

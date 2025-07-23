@@ -2,7 +2,7 @@ package sink
 
 import (
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/tomeai/dataflow/internal/utils"
+	"github.com/tomeai/dataflow/internal/model"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -13,10 +13,10 @@ type MysqlSink struct {
 	log       *log.Helper
 }
 
-func (mysqlSink *MysqlSink) Sink(resources []*utils.Resource) (err error) {
+func (mysqlSink *MysqlSink) Sink(resources []*model.Resource) (err error) {
 	return mysqlSink.db.Table(mysqlSink.tableName).Clauses(clause.OnConflict{
-		Columns: []clause.Column{{Name: "store_id"}},
-		// 一旦创建不允许更新 sink_id和sink_type
-		DoUpdates: clause.AssignmentColumns([]string{"store_key", "data", "metadata", "crawl_time"}),
+		Columns: []clause.Column{{Name: "store_id"}, {Name: "sink_id"}},
+		// 一旦创建不允许更新 sink_id
+		DoUpdates: clause.AssignmentColumns([]string{"store_key", "sink_type", "parent_url", "data", "metadata", "crawl_time"}),
 	}).Create(&resources).Error
 }
