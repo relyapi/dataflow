@@ -2,11 +2,13 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"github.com/bytedance/sonic"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	"github.com/tomeai/dataflow/api/v1/sink"
 	"github.com/tomeai/dataflow/internal/biz"
+	"github.com/tomeai/dataflow/internal/model"
 	"github.com/tomeai/dataflow/internal/utils"
 	"io"
 	"strings"
@@ -19,7 +21,7 @@ type DataServiceManager struct {
 	log     *log.Helper
 }
 
-func (dataSvc *DataServiceManager) deserialize(msg *sink.DoSinkRequest) (data []*utils.Resource, err error) {
+func (dataSvc *DataServiceManager) deserialize(msg *sink.DoSinkRequest) (data []*model.Resource, err error) {
 	if err := sonic.Unmarshal(msg.GetData(), &data); err != nil {
 		return data, err
 	}
@@ -31,7 +33,7 @@ func (dataSvc *DataServiceManager) deserialize(msg *sink.DoSinkRequest) (data []
 			if item.StoreKey == "" {
 				item.StoreId = strings.ReplaceAll(uuid.New().String(), "-", "")
 			} else {
-				item.StoreId = utils.CalcMD5(item.StoreKey)
+				item.StoreId = utils.CalcMD5(fmt.Sprintf("%s-%d", item.StoreKey, item.SinkType))
 			}
 		}
 	}

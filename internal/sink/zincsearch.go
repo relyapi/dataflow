@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/bytedance/sonic"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/tomeai/dataflow/internal/utils"
+	"github.com/tomeai/dataflow/internal/model"
 	client "github.com/zinclabs/sdk-go-zincsearch"
 	"time"
 )
@@ -18,7 +18,7 @@ type ZincSearchSink struct {
 	log          *log.Helper
 }
 
-func (zs *ZincSearchSink) convertData(data []*utils.Resource) []map[string]interface{} {
+func (zs *ZincSearchSink) convertData(data []*model.Resource) []map[string]interface{} {
 	var result []map[string]interface{}
 	for _, item := range data {
 		// struct → []byte
@@ -38,7 +38,7 @@ func (zs *ZincSearchSink) convertData(data []*utils.Resource) []map[string]inter
 	return result
 }
 
-func (zs *ZincSearchSink) Sink(resources []*utils.Resource) error {
+func (zs *ZincSearchSink) Sink(resources []*model.Resource) error {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("Recovered from panic:", r)

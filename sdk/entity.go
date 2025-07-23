@@ -3,6 +3,7 @@ package sdk
 import (
 	"context"
 	"encoding/json"
+	"github.com/tomeai/dataflow/internal/model"
 	"log"
 	"os"
 	"sync"
@@ -15,10 +16,12 @@ import (
 
 // Record 表示一条数据 + 元信息
 type Record struct {
-	StoreKey  string `json:"store_key"`
-	Data      any    `json:"data"`
-	CrawlTime string `json:"crawl_time"`
-	Metadata  any    `json:"metadata"`
+	SinkType  model.SinkType `json:"sink_type"`
+	ParentUrl string         `json:"parent_url"`
+	StoreKey  string         `json:"store_key"`
+	Data      any            `json:"data"`
+	Metadata  any            `json:"metadata"`
+	CrawlTime string         `json:"crawl_time"`
 }
 
 type ResultService struct {
