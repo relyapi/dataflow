@@ -4,7 +4,7 @@ const MysqlDSL = `CREATE TABLE IF NOT EXISTS %s (
  id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
  sink_id varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'sink_id',
  store_id varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '存储id，全局唯一 store_key+sink_type',
- parent_url varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'parent_url',
+ spider_url varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'spider_url',
  sink_type varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'sink_type',
  store_key text COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '全局key，可以是url，也可以为空',
  data json NOT NULL COMMENT '客户端上报数据',

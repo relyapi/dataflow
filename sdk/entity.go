@@ -17,7 +17,7 @@ import (
 // Record 表示一条数据 + 元信息
 type Record struct {
 	SinkType  model.SinkType `json:"sink_type"`
-	ParentUrl string         `json:"parent_url"`
+	SpiderUrl string         `json:"spider_url"`
 	StoreKey  string         `json:"store_key"`
 	Data      any            `json:"data"`
 	Metadata  any            `json:"metadata"`

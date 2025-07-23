@@ -22,7 +22,7 @@ type Resource struct {
 	SinkType int `json:"sink_type"`
 
 	// 来源
-	ParentUrl string `json:"parent_url"`
+	SpiderUrl string `json:"spider_url"`
 
 	// 唯一标识
 	// 数据库upsert唯一key,如果url为空，取uuid替代
