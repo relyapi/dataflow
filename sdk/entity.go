@@ -16,12 +16,11 @@ import (
 
 // Record 表示一条数据 + 元信息
 type Record struct {
-	SinkType  model.SinkType `json:"sink_type"`
-	SpiderUrl string         `json:"spider_url"`
-	StoreKey  string         `json:"store_key"`
-	Data      any            `json:"data"`
-	Metadata  any            `json:"metadata"`
-	CrawlTime string         `json:"crawl_time"`
+	SinkType   model.SinkType `json:"sink_type"`
+	RequestUrl string         `json:"request_url"`
+	Data       any            `json:"data"`
+	Metadata   any            `json:"metadata"`
+	CrawlTime  string         `json:"crawl_time"`
 }
 
 type ResultService struct {

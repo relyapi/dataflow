@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"github.com/bytedance/sonic"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/google/uuid"
 	"github.com/tomeai/dataflow/api/v1/sink"
 	"github.com/tomeai/dataflow/internal/biz"
 	"github.com/tomeai/dataflow/internal/model"
 	"github.com/tomeai/dataflow/internal/utils"
 	"io"
+	"net/url"
 	"strings"
 )
 
@@ -30,11 +30,15 @@ func (dataSvc *DataServiceManager) deserialize(msg *sink.DoSinkRequest) (data []
 	for _, item := range data {
 		if item != nil {
 			item.SinkId = msg.GetSinkId()
-			if item.StoreKey == "" {
-				item.StoreId = strings.ReplaceAll(uuid.New().String(), "-", "")
-			} else {
-				item.StoreId = utils.CalcMD5(fmt.Sprintf("%s-%d", item.StoreKey, item.SinkType))
+			item.StoreId = utils.CalcMD5(fmt.Sprintf("%s-%d", item.RequestUrl, item.SinkType))
+
+			// 解析hostname
+			parsedSpiderURL, err := url.Parse(item.RequestUrl)
+			if err != nil {
+				fmt.Println("Error parsing URL:", err)
+				continue
 			}
+			item.Hostname = parsedSpiderURL.Hostname()
 		}
 	}
 	return data, nil

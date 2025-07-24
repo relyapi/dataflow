@@ -13,14 +13,13 @@ func TestSave(t *testing.T) {
 	}
 	// [sink] item: {'data': {'name': 'xiaoming', 'age': 25, 'time': '2025-07-21 15:46:01', 'hello': 'world', 'world': 1121211}, 'url': 'https://www.json.cn9/', 'crawl_time': '2025-07-21 15:46:01'}
 	record := Record{
-		SinkType:  model.ITEM,
-		SpiderUrl: "https://linux.do/t/topic/73111111",
-		StoreKey:  "https://linux.do/t/topic/73111111",
+		SinkType:   model.ITEM,
+		RequestUrl: "https://linux.do/t/topic/73111111",
 		Data: map[string]any{
 			"name": "opentome",
 		},
 		Metadata: map[string]any{
-			"name": "gage",
+			"name": "xiaoming",
 		},
 	}
 
@@ -36,8 +35,8 @@ func TestBlogSave(t *testing.T) {
 	}
 	// [sink] item: {'data': {'name': 'xiaoming', 'age': 25, 'time': '2025-07-21 15:46:01', 'hello': 'world', 'world': 1121211}, 'url': 'https://www.json.cn9/', 'crawl_time': '2025-07-21 15:46:01'}
 	record := Record{
-		StoreKey: "test/test.txt",
-		Data:     "kakdakdakdkakdakd",
+		RequestUrl: "test/test.txt",
+		Data:       "kakdakdakdkakdakd",
 		Metadata: map[string]any{
 			"name": "gage",
 		},

@@ -21,14 +21,15 @@ type Resource struct {
 	// sink类型
 	SinkType int `json:"sink_type"`
 
-	// 来源
-	SpiderUrl string `json:"spider_url"`
+	// 主域名 为了区分同一类下面的爬虫  比如 高校爬虫  huel.edu.cn tsing.edu.cn
+	Hostname string `json:"hostname"`
 
 	// 唯一标识
 	// 数据库upsert唯一key,如果url为空，取uuid替代
 	StoreId string `json:"store_id"`
-	// 采集连接 url或者key
-	StoreKey string `json:"store_key"`
+	// 来源 根据该链接生成md5 也是根据该url进行upsert resource只保留最新
+	// 后续将通过数据同步 维护每次的版本变动
+	RequestUrl string `json:"request_url"`
 
 	// 采集数据
 	Data json.RawMessage `json:"data"`
