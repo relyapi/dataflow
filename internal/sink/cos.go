@@ -82,6 +82,7 @@ func (cosSink *CosSink) uploadResource(res *model.Resource) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	_, err := cosSink.cosClient.Object.Put(ctx, res.StoreKey, bytes.NewReader(res.Data), opt)
+	storeKey := fmt.Sprintf("%s/%s", res.Hostname, res.StoreId)
+	_, err := cosSink.cosClient.Object.Put(ctx, storeKey, bytes.NewReader(res.Data), opt)
 	return err
 }
