@@ -30,10 +30,11 @@ func (dataSvc *DataServiceManager) deserialize(msg *sink.DoSinkRequest) (data []
 	for _, item := range data {
 		if item != nil {
 			item.SinkId = msg.GetSinkId()
-			item.StoreId = utils.CalcMD5(fmt.Sprintf("%s-%d", item.RequestUrl, item.SinkType))
+			// pc -> item -> url
+			item.StoreId = utils.CalcMD5(fmt.Sprintf("%d-%d-%s", item.CrawlSource, item.CrawlType, item.CrawlUrl))
 
 			// 解析hostname
-			parsedSpiderURL, err := url.Parse(item.RequestUrl)
+			parsedSpiderURL, err := url.Parse(item.CrawlUrl)
 			if err != nil {
 				fmt.Println("Error parsing URL:", err)
 				continue

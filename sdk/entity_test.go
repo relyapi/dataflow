@@ -13,8 +13,8 @@ func TestSave(t *testing.T) {
 	}
 	// [sink] item: {'data': {'name': 'xiaoming', 'age': 25, 'time': '2025-07-21 15:46:01', 'hello': 'world', 'world': 1121211}, 'url': 'https://www.json.cn9/', 'crawl_time': '2025-07-21 15:46:01'}
 	record := Record{
-		SinkType:   model.ITEM,
-		RequestUrl: "https://linux.do/t/topic/73111111",
+		CrawlType: model.ITEM,
+		CrawlUrl:  "https://linux.do/t/topic/73111111",
 		Data: map[string]any{
 			"name": "opentome",
 		},
@@ -35,8 +35,8 @@ func TestBlogSave(t *testing.T) {
 	}
 	// [sink] item: {'data': {'name': 'xiaoming', 'age': 25, 'time': '2025-07-21 15:46:01', 'hello': 'world', 'world': 1121211}, 'url': 'https://www.json.cn9/', 'crawl_time': '2025-07-21 15:46:01'}
 	record := Record{
-		RequestUrl: "test/test.txt",
-		Data:       "kakdakdakdkakdakd",
+		CrawlUrl: "https://m.join-tsinghua.edu.cn/info/1017/1981.htm",
+		Data:     "kakdakdakdkakdakd",
 		Metadata: map[string]any{
 			"name": "gage",
 		},
