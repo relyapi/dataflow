@@ -13,6 +13,15 @@ const (
 	PROFILE                 // 用户信息
 )
 
+type CrawlSource int
+
+const (
+	PC      = 0
+	ANDROID = 1 // 手机端
+	IOS     = 2
+	MINI    = 3 // 小程序
+)
+
 // Resource 存储到数据库的字段
 type Resource struct {
 	// 基础元信息
