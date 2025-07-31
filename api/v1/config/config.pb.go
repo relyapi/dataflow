@@ -23,11 +23,9 @@ const (
 )
 
 type UpdateSourceRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Host          string                 `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
-	Port          int32                  `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
-	Username      string                 `protobuf:"bytes,3,opt,name=username,proto3" json:"username,omitempty"`
-	Password      string                 `protobuf:"bytes,4,opt,name=password,proto3" json:"password,omitempty"`
+	state         protoimpl.MessageState          `protogen:"open.v1"`
+	SourceId      string                          `protobuf:"bytes,1,opt,name=source_id,json=sourceId,proto3" json:"source_id,omitempty"`
+	SourceInfo    *UpdateSourceRequest_SourceInfo `protobuf:"bytes,2,opt,name=sourceInfo,proto3" json:"sourceInfo,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -62,32 +60,18 @@ func (*UpdateSourceRequest) Descriptor() ([]byte, []int) {
 	return file_v1_config_config_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *UpdateSourceRequest) GetHost() string {
+func (x *UpdateSourceRequest) GetSourceId() string {
 	if x != nil {
-		return x.Host
+		return x.SourceId
 	}
 	return ""
 }
 
-func (x *UpdateSourceRequest) GetPort() int32 {
+func (x *UpdateSourceRequest) GetSourceInfo() *UpdateSourceRequest_SourceInfo {
 	if x != nil {
-		return x.Port
+		return x.SourceInfo
 	}
-	return 0
-}
-
-func (x *UpdateSourceRequest) GetUsername() string {
-	if x != nil {
-		return x.Username
-	}
-	return ""
-}
-
-func (x *UpdateSourceRequest) GetPassword() string {
-	if x != nil {
-		return x.Password
-	}
-	return ""
+	return nil
 }
 
 type SourceResponse struct {
@@ -142,7 +126,7 @@ func (x *SourceResponse) GetId() string {
 	return ""
 }
 
-type AddSourceRequest struct {
+type CreateSourceRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Host          string                 `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
 	Port          int32                  `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
@@ -152,20 +136,20 @@ type AddSourceRequest struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *AddSourceRequest) Reset() {
-	*x = AddSourceRequest{}
+func (x *CreateSourceRequest) Reset() {
+	*x = CreateSourceRequest{}
 	mi := &file_v1_config_config_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *AddSourceRequest) String() string {
+func (x *CreateSourceRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AddSourceRequest) ProtoMessage() {}
+func (*CreateSourceRequest) ProtoMessage() {}
 
-func (x *AddSourceRequest) ProtoReflect() protoreflect.Message {
+func (x *CreateSourceRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_v1_config_config_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -177,33 +161,33 @@ func (x *AddSourceRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AddSourceRequest.ProtoReflect.Descriptor instead.
-func (*AddSourceRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use CreateSourceRequest.ProtoReflect.Descriptor instead.
+func (*CreateSourceRequest) Descriptor() ([]byte, []int) {
 	return file_v1_config_config_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *AddSourceRequest) GetHost() string {
+func (x *CreateSourceRequest) GetHost() string {
 	if x != nil {
 		return x.Host
 	}
 	return ""
 }
 
-func (x *AddSourceRequest) GetPort() int32 {
+func (x *CreateSourceRequest) GetPort() int32 {
 	if x != nil {
 		return x.Port
 	}
 	return 0
 }
 
-func (x *AddSourceRequest) GetUsername() string {
+func (x *CreateSourceRequest) GetUsername() string {
 	if x != nil {
 		return x.Username
 	}
 	return ""
 }
 
-func (x *AddSourceRequest) GetPassword() string {
+func (x *CreateSourceRequest) GetPassword() string {
 	if x != nil {
 		return x.Password
 	}
@@ -336,20 +320,94 @@ func (x *CreateSinkResponse) GetTaskId() string {
 	return ""
 }
 
+type UpdateSourceRequest_SourceInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Host          string                 `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
+	Port          int32                  `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
+	Username      string                 `protobuf:"bytes,3,opt,name=username,proto3" json:"username,omitempty"`
+	Password      string                 `protobuf:"bytes,4,opt,name=password,proto3" json:"password,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateSourceRequest_SourceInfo) Reset() {
+	*x = UpdateSourceRequest_SourceInfo{}
+	mi := &file_v1_config_config_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateSourceRequest_SourceInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateSourceRequest_SourceInfo) ProtoMessage() {}
+
+func (x *UpdateSourceRequest_SourceInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_config_config_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateSourceRequest_SourceInfo.ProtoReflect.Descriptor instead.
+func (*UpdateSourceRequest_SourceInfo) Descriptor() ([]byte, []int) {
+	return file_v1_config_config_proto_rawDescGZIP(), []int{0, 0}
+}
+
+func (x *UpdateSourceRequest_SourceInfo) GetHost() string {
+	if x != nil {
+		return x.Host
+	}
+	return ""
+}
+
+func (x *UpdateSourceRequest_SourceInfo) GetPort() int32 {
+	if x != nil {
+		return x.Port
+	}
+	return 0
+}
+
+func (x *UpdateSourceRequest_SourceInfo) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *UpdateSourceRequest_SourceInfo) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
 var File_v1_config_config_proto protoreflect.FileDescriptor
 
 const file_v1_config_config_proto_rawDesc = "" +
 	"\n" +
-	"\x16v1/config/config.proto\x12\rapi.v1.config\x1a\x1cgoogle/api/annotations.proto\"u\n" +
-	"\x13UpdateSourceRequest\x12\x12\n" +
+	"\x16v1/config/config.proto\x12\rapi.v1.config\x1a\x1cgoogle/api/annotations.proto\"\xef\x01\n" +
+	"\x13UpdateSourceRequest\x12\x1b\n" +
+	"\tsource_id\x18\x01 \x01(\tR\bsourceId\x12M\n" +
+	"\n" +
+	"sourceInfo\x18\x02 \x01(\v2-.api.v1.config.UpdateSourceRequest.SourceInfoR\n" +
+	"sourceInfo\x1al\n" +
+	"\n" +
+	"SourceInfo\x12\x12\n" +
 	"\x04host\x18\x01 \x01(\tR\x04host\x12\x12\n" +
 	"\x04port\x18\x02 \x01(\x05R\x04port\x12\x1a\n" +
 	"\busername\x18\x03 \x01(\tR\busername\x12\x1a\n" +
 	"\bpassword\x18\x04 \x01(\tR\bpassword\"2\n" +
 	"\x0eSourceResponse\x12\x10\n" +
 	"\x03msg\x18\x01 \x01(\tR\x03msg\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\tR\x02id\"r\n" +
-	"\x10AddSourceRequest\x12\x12\n" +
+	"\x02id\x18\x02 \x01(\tR\x02id\"u\n" +
+	"\x13CreateSourceRequest\x12\x12\n" +
 	"\x04host\x18\x01 \x01(\tR\x04host\x12\x12\n" +
 	"\x04port\x18\x02 \x01(\x05R\x04port\x12\x1a\n" +
 	"\busername\x18\x03 \x01(\tR\busername\x12\x1a\n" +
@@ -361,14 +419,12 @@ const file_v1_config_config_proto_rawDesc = "" +
 	"\bsourceId\x18\x04 \x01(\x05R\bsourceId\x12\x16\n" +
 	"\x06remark\x18\x05 \x01(\tR\x06remark\",\n" +
 	"\x12CreateSinkResponse\x12\x16\n" +
-	"\x06taskId\x18\x01 \x01(\tR\x06taskId2\xa4\x02\n" +
-	"\tConfigHub\x12S\n" +
-	"\fUpdateSource\x12\".api.v1.config.UpdateSourceRequest\x1a\x1d.api.v1.config.SourceResponse\"\x00\x12M\n" +
-	"\tAddSource\x12\x1f.api.v1.config.AddSourceRequest\x1a\x1d.api.v1.config.SourceResponse\"\x00\x12s\n" +
+	"\x06taskId\x18\x01 \x01(\tR\x06taskId2\xf1\x02\n" +
+	"\tConfigHub\x12r\n" +
+	"\fCreateSource\x12\".api.v1.config.CreateSourceRequest\x1a\x1d.api.v1.config.SourceResponse\"\x1f\x82\xd3\xe4\x93\x02\x19:\x01*\"\x14/v1/dataflow/sources\x12~\n" +
+	"\fUpdateSource\x12\".api.v1.config.UpdateSourceRequest\x1a\x1d.api.v1.config.SourceResponse\"+\x82\xd3\xe4\x93\x02%:\x01*2 /v1/dataflow/sources/{source_id}\x12p\n" +
 	"\n" +
-	"CreateSink\x12 .api.v1.config.CreateSinkRequest\x1a!.api.v1.config.CreateSinkResponse\" \x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/dataflow/sink/create2\n" +
-	"\n" +
-	"\bTemplateB1Z/github.com/tomeai/dataflow/api/v1/config;configb\x06proto3"
+	"CreateSink\x12 .api.v1.config.CreateSinkRequest\x1a!.api.v1.config.CreateSinkResponse\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/dataflow/sinksB1Z/github.com/tomeai/dataflow/api/v1/config;configb\x06proto3"
 
 var (
 	file_v1_config_config_proto_rawDescOnce sync.Once
@@ -382,26 +438,28 @@ func file_v1_config_config_proto_rawDescGZIP() []byte {
 	return file_v1_config_config_proto_rawDescData
 }
 
-var file_v1_config_config_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_v1_config_config_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_v1_config_config_proto_goTypes = []any{
-	(*UpdateSourceRequest)(nil), // 0: api.v1.config.UpdateSourceRequest
-	(*SourceResponse)(nil),      // 1: api.v1.config.SourceResponse
-	(*AddSourceRequest)(nil),    // 2: api.v1.config.AddSourceRequest
-	(*CreateSinkRequest)(nil),   // 3: api.v1.config.CreateSinkRequest
-	(*CreateSinkResponse)(nil),  // 4: api.v1.config.CreateSinkResponse
+	(*UpdateSourceRequest)(nil),            // 0: api.v1.config.UpdateSourceRequest
+	(*SourceResponse)(nil),                 // 1: api.v1.config.SourceResponse
+	(*CreateSourceRequest)(nil),            // 2: api.v1.config.CreateSourceRequest
+	(*CreateSinkRequest)(nil),              // 3: api.v1.config.CreateSinkRequest
+	(*CreateSinkResponse)(nil),             // 4: api.v1.config.CreateSinkResponse
+	(*UpdateSourceRequest_SourceInfo)(nil), // 5: api.v1.config.UpdateSourceRequest.SourceInfo
 }
 var file_v1_config_config_proto_depIdxs = []int32{
-	0, // 0: api.v1.config.ConfigHub.UpdateSource:input_type -> api.v1.config.UpdateSourceRequest
-	2, // 1: api.v1.config.ConfigHub.AddSource:input_type -> api.v1.config.AddSourceRequest
-	3, // 2: api.v1.config.ConfigHub.CreateSink:input_type -> api.v1.config.CreateSinkRequest
-	1, // 3: api.v1.config.ConfigHub.UpdateSource:output_type -> api.v1.config.SourceResponse
-	1, // 4: api.v1.config.ConfigHub.AddSource:output_type -> api.v1.config.SourceResponse
-	4, // 5: api.v1.config.ConfigHub.CreateSink:output_type -> api.v1.config.CreateSinkResponse
-	3, // [3:6] is the sub-list for method output_type
-	0, // [0:3] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	5, // 0: api.v1.config.UpdateSourceRequest.sourceInfo:type_name -> api.v1.config.UpdateSourceRequest.SourceInfo
+	2, // 1: api.v1.config.ConfigHub.CreateSource:input_type -> api.v1.config.CreateSourceRequest
+	0, // 2: api.v1.config.ConfigHub.UpdateSource:input_type -> api.v1.config.UpdateSourceRequest
+	3, // 3: api.v1.config.ConfigHub.CreateSink:input_type -> api.v1.config.CreateSinkRequest
+	1, // 4: api.v1.config.ConfigHub.CreateSource:output_type -> api.v1.config.SourceResponse
+	1, // 5: api.v1.config.ConfigHub.UpdateSource:output_type -> api.v1.config.SourceResponse
+	4, // 6: api.v1.config.ConfigHub.CreateSink:output_type -> api.v1.config.CreateSinkResponse
+	4, // [4:7] is the sub-list for method output_type
+	1, // [1:4] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_v1_config_config_proto_init() }
@@ -415,9 +473,9 @@ func file_v1_config_config_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_config_config_proto_rawDesc), len(file_v1_config_config_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   6,
 			NumExtensions: 0,
-			NumServices:   2,
+			NumServices:   1,
 		},
 		GoTypes:           file_v1_config_config_proto_goTypes,
 		DependencyIndexes: file_v1_config_config_proto_depIdxs,
