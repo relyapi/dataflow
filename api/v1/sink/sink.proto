@@ -3,8 +3,7 @@ syntax = "proto3";
 package api.v1.sink;
 
 option go_package = "github.com/tomeai/dataflow/api/v1/sink;sink";
-
-import "google/protobuf/any.proto";
+import "google/api/annotations.proto";
 
 // 爬虫数据存储
 message DoSinkRequest {

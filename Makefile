@@ -52,11 +52,11 @@ api:
  	       --gogofaster_out=source_relative:./api \
 	       api/v1/flow/pipeline.proto
 
-	python -m grpc.tools.protoc  -I ./api \
-		  	--python_out=./api \
-			--grpc_python_out=./api \
-			--pyi_out=./api \
-			 api/v1/sink/sink.proto
+	#python -m grpc.tools.protoc  -I ./api \
+#		  	--python_out=./api \
+#			--grpc_python_out=./api \
+#			--pyi_out=./api \
+#			 api/v1/sink/sink.proto
 
 .PHONY: build
 # build

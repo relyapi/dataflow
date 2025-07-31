@@ -20,15 +20,70 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationConfigHubCreateSink = "/api.v1.config.ConfigHub/CreateSink"
+const OperationConfigHubCreateSource = "/api.v1.config.ConfigHub/CreateSource"
+const OperationConfigHubUpdateSource = "/api.v1.config.ConfigHub/UpdateSource"
 
 type ConfigHubHTTPServer interface {
 	// CreateSink 创建sink
 	CreateSink(context.Context, *CreateSinkRequest) (*CreateSinkResponse, error)
+	// CreateSource 创建数据源
+	CreateSource(context.Context, *CreateSourceRequest) (*SourceResponse, error)
+	// UpdateSource 更新数据源
+	UpdateSource(context.Context, *UpdateSourceRequest) (*SourceResponse, error)
 }
 
 func RegisterConfigHubHTTPServer(s *http.Server, srv ConfigHubHTTPServer) {
 	r := s.Route("/")
-	r.POST("/dataflow/sink/create", _ConfigHub_CreateSink0_HTTP_Handler(srv))
+	r.POST("/v1/dataflow/sources", _ConfigHub_CreateSource0_HTTP_Handler(srv))
+	r.PATCH("/v1/dataflow/sources/{source_id}", _ConfigHub_UpdateSource0_HTTP_Handler(srv))
+	r.POST("/v1/dataflow/sinks", _ConfigHub_CreateSink0_HTTP_Handler(srv))
+}
+
+func _ConfigHub_CreateSource0_HTTP_Handler(srv ConfigHubHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in CreateSourceRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationConfigHubCreateSource)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.CreateSource(ctx, req.(*CreateSourceRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SourceResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _ConfigHub_UpdateSource0_HTTP_Handler(srv ConfigHubHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in UpdateSourceRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationConfigHubUpdateSource)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.UpdateSource(ctx, req.(*UpdateSourceRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SourceResponse)
+		return ctx.Result(200, reply)
+	}
 }
 
 func _ConfigHub_CreateSink0_HTTP_Handler(srv ConfigHubHTTPServer) func(ctx http.Context) error {
@@ -55,6 +110,8 @@ func _ConfigHub_CreateSink0_HTTP_Handler(srv ConfigHubHTTPServer) func(ctx http.
 
 type ConfigHubHTTPClient interface {
 	CreateSink(ctx context.Context, req *CreateSinkRequest, opts ...http.CallOption) (rsp *CreateSinkResponse, err error)
+	CreateSource(ctx context.Context, req *CreateSourceRequest, opts ...http.CallOption) (rsp *SourceResponse, err error)
+	UpdateSource(ctx context.Context, req *UpdateSourceRequest, opts ...http.CallOption) (rsp *SourceResponse, err error)
 }
 
 type ConfigHubHTTPClientImpl struct {
@@ -67,11 +124,37 @@ func NewConfigHubHTTPClient(client *http.Client) ConfigHubHTTPClient {
 
 func (c *ConfigHubHTTPClientImpl) CreateSink(ctx context.Context, in *CreateSinkRequest, opts ...http.CallOption) (*CreateSinkResponse, error) {
 	var out CreateSinkResponse
-	pattern := "/dataflow/sink/create"
+	pattern := "/v1/dataflow/sinks"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationConfigHubCreateSink))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *ConfigHubHTTPClientImpl) CreateSource(ctx context.Context, in *CreateSourceRequest, opts ...http.CallOption) (*SourceResponse, error) {
+	var out SourceResponse
+	pattern := "/v1/dataflow/sources"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationConfigHubCreateSource))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *ConfigHubHTTPClientImpl) UpdateSource(ctx context.Context, in *UpdateSourceRequest, opts ...http.CallOption) (*SourceResponse, error) {
+	var out SourceResponse
+	pattern := "/v1/dataflow/sources/{source_id}"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationConfigHubUpdateSource))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PATCH", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

@@ -8,10 +8,14 @@ import "google/api/annotations.proto";
 
 
 message UpdateSourceRequest{
-  string host = 1;
-  int32 port = 2;
-  string username = 3;
-  string password = 4;
+  string source_id = 1;
+  message SourceInfo {
+    string host = 1;
+    int32 port = 2;
+    string username = 3;
+    string password = 4;
+  }
+  SourceInfo sourceInfo = 2;
 }
 
 message SourceResponse{
@@ -20,7 +24,7 @@ message SourceResponse{
 }
 
 
-message AddSourceRequest{
+message CreateSourceRequest{
   string host = 1;
   int32 port = 2;
   string username = 3;
@@ -48,21 +52,27 @@ message CreateSinkResponse{
 // 添加数据源
 // 1. 动态配置数据源
 service ConfigHub{
-  // 添加数据源
-  rpc UpdateSource(UpdateSourceRequest) returns (SourceResponse){}
-  // 更新数据源
-  rpc AddSource(AddSourceRequest) returns (SourceResponse){}
-  // 创建sink
-  rpc CreateSink(CreateSinkRequest) returns (CreateSinkResponse){
+  // 创建数据源
+  rpc CreateSource(CreateSourceRequest) returns (SourceResponse) {
     option (google.api.http) = {
-      post: "/dataflow/sink/create",
+      post: "/v1/dataflow/sources",
       body: "*"
     };
   }
-}
 
-// 模板信息配置
-// 配置写入字段写入模板
-service Template {
+  // 更新数据源
+  rpc UpdateSource(UpdateSourceRequest) returns (SourceResponse) {
+    option (google.api.http) = {
+      patch: "/v1/dataflow/sources/{source_id}",
+      body: "*"
+    };
+  }
 
+  // 创建sink
+  rpc CreateSink(CreateSinkRequest) returns (CreateSinkResponse){
+    option (google.api.http) = {
+      post: "/v1/dataflow/sinks",
+      body: "*"
+    };
+  }
 }

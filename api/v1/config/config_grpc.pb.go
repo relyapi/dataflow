@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
+	ConfigHub_CreateSource_FullMethodName = "/api.v1.config.ConfigHub/CreateSource"
 	ConfigHub_UpdateSource_FullMethodName = "/api.v1.config.ConfigHub/UpdateSource"
-	ConfigHub_AddSource_FullMethodName    = "/api.v1.config.ConfigHub/AddSource"
 	ConfigHub_CreateSink_FullMethodName   = "/api.v1.config.ConfigHub/CreateSink"
 )
 
@@ -31,10 +31,10 @@ const (
 // 添加数据源
 // 1. 动态配置数据源
 type ConfigHubClient interface {
-	// 添加数据源
-	UpdateSource(ctx context.Context, in *UpdateSourceRequest, opts ...grpc.CallOption) (*SourceResponse, error)
+	// 创建数据源
+	CreateSource(ctx context.Context, in *CreateSourceRequest, opts ...grpc.CallOption) (*SourceResponse, error)
 	// 更新数据源
-	AddSource(ctx context.Context, in *AddSourceRequest, opts ...grpc.CallOption) (*SourceResponse, error)
+	UpdateSource(ctx context.Context, in *UpdateSourceRequest, opts ...grpc.CallOption) (*SourceResponse, error)
 	// 创建sink
 	CreateSink(ctx context.Context, in *CreateSinkRequest, opts ...grpc.CallOption) (*CreateSinkResponse, error)
 }
@@ -47,20 +47,20 @@ func NewConfigHubClient(cc grpc.ClientConnInterface) ConfigHubClient {
 	return &configHubClient{cc}
 }
 
-func (c *configHubClient) UpdateSource(ctx context.Context, in *UpdateSourceRequest, opts ...grpc.CallOption) (*SourceResponse, error) {
+func (c *configHubClient) CreateSource(ctx context.Context, in *CreateSourceRequest, opts ...grpc.CallOption) (*SourceResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SourceResponse)
-	err := c.cc.Invoke(ctx, ConfigHub_UpdateSource_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ConfigHub_CreateSource_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *configHubClient) AddSource(ctx context.Context, in *AddSourceRequest, opts ...grpc.CallOption) (*SourceResponse, error) {
+func (c *configHubClient) UpdateSource(ctx context.Context, in *UpdateSourceRequest, opts ...grpc.CallOption) (*SourceResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SourceResponse)
-	err := c.cc.Invoke(ctx, ConfigHub_AddSource_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ConfigHub_UpdateSource_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -84,10 +84,10 @@ func (c *configHubClient) CreateSink(ctx context.Context, in *CreateSinkRequest,
 // 添加数据源
 // 1. 动态配置数据源
 type ConfigHubServer interface {
-	// 添加数据源
-	UpdateSource(context.Context, *UpdateSourceRequest) (*SourceResponse, error)
+	// 创建数据源
+	CreateSource(context.Context, *CreateSourceRequest) (*SourceResponse, error)
 	// 更新数据源
-	AddSource(context.Context, *AddSourceRequest) (*SourceResponse, error)
+	UpdateSource(context.Context, *UpdateSourceRequest) (*SourceResponse, error)
 	// 创建sink
 	CreateSink(context.Context, *CreateSinkRequest) (*CreateSinkResponse, error)
 	mustEmbedUnimplementedConfigHubServer()
@@ -100,11 +100,11 @@ type ConfigHubServer interface {
 // pointer dereference when methods are called.
 type UnimplementedConfigHubServer struct{}
 
+func (UnimplementedConfigHubServer) CreateSource(context.Context, *CreateSourceRequest) (*SourceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateSource not implemented")
+}
 func (UnimplementedConfigHubServer) UpdateSource(context.Context, *UpdateSourceRequest) (*SourceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateSource not implemented")
-}
-func (UnimplementedConfigHubServer) AddSource(context.Context, *AddSourceRequest) (*SourceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddSource not implemented")
 }
 func (UnimplementedConfigHubServer) CreateSink(context.Context, *CreateSinkRequest) (*CreateSinkResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateSink not implemented")
@@ -130,6 +130,24 @@ func RegisterConfigHubServer(s grpc.ServiceRegistrar, srv ConfigHubServer) {
 	s.RegisterService(&ConfigHub_ServiceDesc, srv)
 }
 
+func _ConfigHub_CreateSource_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateSourceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConfigHubServer).CreateSource(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ConfigHub_CreateSource_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConfigHubServer).CreateSource(ctx, req.(*CreateSourceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ConfigHub_UpdateSource_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateSourceRequest)
 	if err := dec(in); err != nil {
@@ -144,24 +162,6 @@ func _ConfigHub_UpdateSource_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ConfigHubServer).UpdateSource(ctx, req.(*UpdateSourceRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ConfigHub_AddSource_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddSourceRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ConfigHubServer).AddSource(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ConfigHub_AddSource_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ConfigHubServer).AddSource(ctx, req.(*AddSourceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -192,12 +192,12 @@ var ConfigHub_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ConfigHubServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "UpdateSource",
-			Handler:    _ConfigHub_UpdateSource_Handler,
+			MethodName: "CreateSource",
+			Handler:    _ConfigHub_CreateSource_Handler,
 		},
 		{
-			MethodName: "AddSource",
-			Handler:    _ConfigHub_AddSource_Handler,
+			MethodName: "UpdateSource",
+			Handler:    _ConfigHub_UpdateSource_Handler,
 		},
 		{
 			MethodName: "CreateSink",
@@ -206,70 +206,4 @@ var ConfigHub_ServiceDesc = grpc.ServiceDesc{
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "v1/config/config.proto",
-}
-
-// TemplateClient is the client API for Template service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-//
-// 模板信息配置
-// 配置写入字段写入模板
-type TemplateClient interface {
-}
-
-type templateClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewTemplateClient(cc grpc.ClientConnInterface) TemplateClient {
-	return &templateClient{cc}
-}
-
-// TemplateServer is the server API for Template service.
-// All implementations must embed UnimplementedTemplateServer
-// for forward compatibility.
-//
-// 模板信息配置
-// 配置写入字段写入模板
-type TemplateServer interface {
-	mustEmbedUnimplementedTemplateServer()
-}
-
-// UnimplementedTemplateServer must be embedded to have
-// forward compatible implementations.
-//
-// NOTE: this should be embedded by value instead of pointer to avoid a nil
-// pointer dereference when methods are called.
-type UnimplementedTemplateServer struct{}
-
-func (UnimplementedTemplateServer) mustEmbedUnimplementedTemplateServer() {}
-func (UnimplementedTemplateServer) testEmbeddedByValue()                  {}
-
-// UnsafeTemplateServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to TemplateServer will
-// result in compilation errors.
-type UnsafeTemplateServer interface {
-	mustEmbedUnimplementedTemplateServer()
-}
-
-func RegisterTemplateServer(s grpc.ServiceRegistrar, srv TemplateServer) {
-	// If the following call pancis, it indicates UnimplementedTemplateServer was
-	// embedded by pointer and is nil.  This will cause panics if an
-	// unimplemented method is ever invoked, so we test this at initialization
-	// time to prevent it from happening at runtime later due to I/O.
-	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
-		t.testEmbeddedByValue()
-	}
-	s.RegisterService(&Template_ServiceDesc, srv)
-}
-
-// Template_ServiceDesc is the grpc.ServiceDesc for Template service.
-// It's only intended for direct use with grpc.RegisterService,
-// and not to be introspected or modified (even as a copy)
-var Template_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.v1.config.Template",
-	HandlerType: (*TemplateServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams:     []grpc.StreamDesc{},
-	Metadata:    "v1/config/config.proto",
 }

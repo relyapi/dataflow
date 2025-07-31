@@ -4,7 +4,7 @@ package api.v1.flow;
 import "protobuf/gogo/gogo.proto";
 
 option (gogoproto.populate_all) = true;
-option go_package = "v1/flow;flow";
+option go_package = "github.com/tomeai/dataflow/api/v1/flow;flow";
 
 // Source 数据存储源
 message Source {

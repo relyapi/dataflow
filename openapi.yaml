@@ -3,11 +3,29 @@
 
 openapi: 3.0.3
 info:
-    title: ConfigHub API
-    description: "添加数据源\r\n 1. 动态配置数据源"
+    title: ""
     version: 0.0.1
 paths:
-    /dataflow/sink/create:
+    /sink:
+        post:
+            tags:
+                - DataHub
+            description: 数据入库
+            operationId: DataHub_DoSink
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.v1.sink.DoSinkRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.v1.sink.Response'
+    /v1/dataflow/sinks:
         post:
             tags:
                 - ConfigHub
@@ -26,6 +44,50 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.v1.config.CreateSinkResponse'
+    /v1/dataflow/sources:
+        post:
+            tags:
+                - ConfigHub
+            description: 创建数据源
+            operationId: ConfigHub_CreateSource
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.v1.config.CreateSourceRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.v1.config.SourceResponse'
+    /v1/dataflow/sources/{sourceId}:
+        patch:
+            tags:
+                - ConfigHub
+            description: 更新数据源
+            operationId: ConfigHub_UpdateSource
+            parameters:
+                - name: sourceId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.v1.config.UpdateSourceRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.v1.config.SourceResponse'
 components:
     schemas:
         api.v1.config.CreateSinkRequest:
@@ -53,5 +115,61 @@ components:
             properties:
                 taskId:
                     type: string
+        api.v1.config.CreateSourceRequest:
+            type: object
+            properties:
+                host:
+                    type: string
+                port:
+                    type: integer
+                    format: int32
+                username:
+                    type: string
+                password:
+                    type: string
+        api.v1.config.SourceResponse:
+            type: object
+            properties:
+                msg:
+                    type: string
+                id:
+                    type: string
+        api.v1.config.UpdateSourceRequest:
+            type: object
+            properties:
+                sourceId:
+                    type: string
+                sourceInfo:
+                    $ref: '#/components/schemas/api.v1.config.UpdateSourceRequest_SourceInfo'
+        api.v1.config.UpdateSourceRequest_SourceInfo:
+            type: object
+            properties:
+                host:
+                    type: string
+                port:
+                    type: integer
+                    format: int32
+                username:
+                    type: string
+                password:
+                    type: string
+        api.v1.sink.DoSinkRequest:
+            type: object
+            properties:
+                sinkId:
+                    type: string
+                data:
+                    type: string
+                    description: 元数据隐藏在data里面
+                    format: bytes
+            description: 爬虫数据存储
+        api.v1.sink.Response:
+            type: object
+            properties:
+                status:
+                    type: boolean
 tags:
     - name: ConfigHub
+      description: "添加数据源\r\n 1. 动态配置数据源"
+    - name: DataHub
+      description: pipeline逻辑

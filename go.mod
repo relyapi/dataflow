@@ -8,7 +8,6 @@ require (
 	github.com/elastic/go-elasticsearch/v9 v9.0.0
 	github.com/go-kratos/kratos/v2 v2.8.4
 	github.com/gogo/protobuf v1.3.2
-	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.6.0
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.67
 	github.com/zinclabs/sdk-go-zincsearch v0.3.3
@@ -36,6 +35,7 @@ require (
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
