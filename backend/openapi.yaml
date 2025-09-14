@@ -1,0 +1,139 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: ConfigHub API
+    description: "添加数据源\r\n 1. 动态配置数据源"
+    version: 0.0.1
+paths:
+    /v1/dataflow/sinks:
+        post:
+            tags:
+                - ConfigHub
+            description: 创建sink
+            operationId: ConfigHub_CreateSink
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.v1.config.CreateSinkRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.v1.config.CreateSinkResponse'
+    /v1/dataflow/sources:
+        post:
+            tags:
+                - ConfigHub
+            description: 创建数据源
+            operationId: ConfigHub_CreateSource
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.v1.config.CreateSourceRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.v1.config.SourceResponse'
+    /v1/dataflow/sources/{sourceId}:
+        patch:
+            tags:
+                - ConfigHub
+            description: 更新数据源
+            operationId: ConfigHub_UpdateSource
+            parameters:
+                - name: sourceId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.v1.config.UpdateSourceRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.v1.config.SourceResponse'
+components:
+    schemas:
+        api.v1.config.CreateSinkRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                    description: 名称
+                dnName:
+                    type: string
+                    description: 数据库名称
+                tableName:
+                    type: string
+                    description: 表名
+                sourceId:
+                    type: integer
+                    description: source源
+                    format: int32
+                remark:
+                    type: string
+                    description: 备注
+            description: 创建sink，返回sink_id
+        api.v1.config.CreateSinkResponse:
+            type: object
+            properties:
+                taskId:
+                    type: string
+        api.v1.config.CreateSourceRequest:
+            type: object
+            properties:
+                host:
+                    type: string
+                port:
+                    type: integer
+                    format: int32
+                username:
+                    type: string
+                password:
+                    type: string
+        api.v1.config.SourceResponse:
+            type: object
+            properties:
+                msg:
+                    type: string
+                id:
+                    type: string
+        api.v1.config.UpdateSourceRequest:
+            type: object
+            properties:
+                sourceId:
+                    type: string
+                sourceInfo:
+                    $ref: '#/components/schemas/api.v1.config.UpdateSourceRequest_SourceInfo'
+        api.v1.config.UpdateSourceRequest_SourceInfo:
+            type: object
+            properties:
+                host:
+                    type: string
+                port:
+                    type: integer
+                    format: int32
+                username:
+                    type: string
+                password:
+                    type: string
+tags:
+    - name: ConfigHub
