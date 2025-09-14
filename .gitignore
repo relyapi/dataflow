@@ -8,7 +8,7 @@
 releases/
 
 .idea/
-configs/config.yaml
+backend/configs/config.yaml
 README_INNER.md
 # Test binary, built with `go test -c`
 *.test

@@ -1,0 +1,13 @@
+dataflow.relyapi.com {
+    reverse_proxy dataflow_server:8000
+}
+
+pipeline.relyapi.com {
+    tls fovegage@gmail.com
+
+    reverse_proxy dataflow_server:9000 {
+        transport http {
+            versions h2c
+        }
+    }
+}

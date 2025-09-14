@@ -1,0 +1,68 @@
+services:
+  caddy:
+    image: caddy:2.10.2-alpine
+    container_name: dataflow-caddy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile
+    networks:
+      - dataflow_network
+    depends_on:
+      - dataflow_server
+
+  dataflow_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dataflow-server:latest
+    container_name: dataflow-server
+    restart: always
+    ports:
+      - "8000:8000"
+      - "9000:9000"
+    depends_on:
+      - relyapi_mysql
+      - relyapi_redis
+    volumes:
+      - ./backend/deploy/config.yaml:/dataflow/backend/configs/config.yaml
+    networks:
+      - dataflow_network
+
+  dataflow_mysql:
+    image: mysql:8.0.41
+    ports:
+      - "${DOCKER_MYSQL_MAP_PORT:-3306}:3306"
+    container_name: dataflow-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: dataflow
+      MYSQL_ROOT_PASSWORD: 123456
+      TZ: Asia/Shanghai
+    volumes:
+      - relyapi_mysql:/var/lib/mysql
+    networks:
+      - dataflow_network
+    command:
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --lower_case_table_names=1
+
+
+networks:
+  dataflow_network:
+    name: dataflow_network
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.10.10.0/24
+
+volumes:
+  relyapi_mysql:
+    name: relyapi_mysql
+  relyapi_redis:
+    name: relyapi_redis
