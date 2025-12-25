@@ -27,7 +27,7 @@ services:
       - relyapi_mysql
       - relyapi_redis
     volumes:
-      - ./backend/deploy/config.yaml:/dataflow/backend/configs/config.yaml
+      - ./deploy/config.yaml:/data/conf/config.yaml
     networks:
       - dataflow_network
 

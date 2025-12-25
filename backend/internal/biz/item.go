@@ -2,6 +2,7 @@ package biz
 
 import (
 	"context"
+
 	"github.com/tomeai/dataflow/api/v1/flow"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -10,7 +11,7 @@ import (
 // ItemRepo is a Greater repo.
 type ItemRepo interface {
 	QueryDataSinkById(context.Context, string) (*flow.Sink, error)
-	GetAllSink(context.Context) ([]*flow.Sink, error)
+	GetSinks(context.Context) ([]*flow.Sink, error)
 }
 
 type ItemUseCase struct {
@@ -26,6 +27,6 @@ func (s ItemUseCase) QueryDataSinkById(ctx context.Context, id string) (*flow.Si
 	return s.repo.QueryDataSinkById(ctx, id)
 }
 
-func (s ItemUseCase) GetAllSink(ctx context.Context) ([]*flow.Sink, error) {
-	return s.repo.GetAllSink(ctx)
+func (s ItemUseCase) GetSinks(ctx context.Context) ([]*flow.Sink, error) {
+	return s.repo.GetSinks(ctx)
 }

@@ -2,14 +2,17 @@ package sink
 
 import (
 	"context"
+	"net/url"
+
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/tencentyun/cos-go-sdk-v5"
 	"github.com/tomeai/dataflow/api/v1/flow"
-	model2 "github.com/tomeai/dataflow/internal/model"
-	"net/url"
+	"github.com/tomeai/dataflow/internal/model"
+	"gorm.io/driver/postgres"
 
 	"encoding/base64"
 	"fmt"
+
 	"github.com/cenkalti/backoff/v4"
 	client "github.com/zinclabs/sdk-go-zincsearch"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -22,7 +25,7 @@ import (
 )
 
 type DataHubSink interface {
-	Sink(resources []*model2.Resource) (err error)
+	Sink(resources []*model.Resource) (err error)
 }
 
 type SourceStrategy struct {
@@ -108,6 +111,46 @@ func NewZincSearchSink(sinkInfo *flow.Sink, logger log.Logger) (DataHubSink, err
 	}, nil
 }
 
+func NewPostgresSink(sinkInfo *flow.Sink, logger log.Logger) (DataHubSink, error) {
+	loggerHelper := log.NewHelper(log.With(logger, "module", "sink/postgres"))
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Shanghai", sinkInfo.Source.Host, sinkInfo.Source.Username, sinkInfo.Source.Password, sinkInfo.Source.DbName, sinkInfo.Source.Port)
+	var db *gorm.DB
+	var err error
+
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	retryOp := func() error {
+		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+		return err
+	}
+
+	bo := backoff.NewExponentialBackOff()
+	boCtx := backoff.WithContext(bo, ctx)
+
+	err = backoff.RetryNotify(
+		retryOp,
+		boCtx,
+		func(err error, d time.Duration) {
+			loggerHelper.Infof("Postgres 连接失败，%s 后重试：%v", d, err)
+		},
+	)
+
+	if err != nil {
+		return nil, fmt.Errorf("连接 Postgres 失败: %w", err)
+	}
+
+	if err := db.Exec(fmt.Sprintf(model.PostgresDSL, sinkInfo.TableName, sinkInfo.TableName, sinkInfo.TableName)).Error; err != nil {
+		loggerHelper.Infof("Postgres %s %v", sinkInfo.TableName, err)
+	}
+
+	return &PostgresqlSink{
+		db:        db,
+		tableName: sinkInfo.TableName,
+		log:       loggerHelper,
+	}, nil
+}
+
 func NewMysqlSink(sinkInfo *flow.Sink, logger log.Logger) (DataHubSink, error) {
 	loggerHelper := log.NewHelper(log.With(logger, "module", "sink/mysql"))
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=True&loc=Local", sinkInfo.Source.Username, sinkInfo.Source.Password, sinkInfo.Source.Host, sinkInfo.Source.Port, sinkInfo.Source.DbName)
@@ -138,7 +181,7 @@ func NewMysqlSink(sinkInfo *flow.Sink, logger log.Logger) (DataHubSink, error) {
 		return nil, fmt.Errorf("连接 MySQL 失败: %w", err)
 	}
 
-	if err := db.Exec(fmt.Sprintf(model2.MysqlDSL, sinkInfo.TableName)).Error; err != nil {
+	if err := db.Exec(fmt.Sprintf(model.MysqlDSL, sinkInfo.TableName)).Error; err != nil {
 		loggerHelper.Infof("MySQL %s %v", sinkInfo.TableName, err)
 	}
 

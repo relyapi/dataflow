@@ -2,10 +2,11 @@ package biz
 
 import (
 	"errors"
+	"sync"
+
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/tomeai/dataflow/internal/model"
 	"github.com/tomeai/dataflow/internal/sink"
-	"sync"
 )
 
 type SinkService struct {
@@ -18,7 +19,6 @@ func (sinkSvc *SinkService) InsertData(sinkId string, resources []*model.Resourc
 	if value, ok := sinkSvc.SinkMap.Load(sinkId); ok {
 		sinkInfo := value.(sink.DataHubSink)
 		return sinkInfo.Sink(resources)
-	} else {
-		return errors.New("sink not found")
 	}
+	return errors.New("sink not found")
 }

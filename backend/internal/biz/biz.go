@@ -2,6 +2,7 @@ package biz
 
 import (
 	"context"
+
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
 	"github.com/tomeai/dataflow/internal/sink"
@@ -16,8 +17,8 @@ func NewSinkService(itemSvc ItemRepo, logger log.Logger) *SinkService {
 		log: loggerHelper,
 	}
 
-	// 从数据库初始化
-	sinkResults, err := itemSvc.GetAllSink(context.Background())
+	// 从数据库初始化，按sink存储
+	sinkResults, err := itemSvc.GetSinks(context.Background())
 	if err != nil {
 		loggerHelper.Fatalf("GetSink err: %v", err)
 	}
@@ -27,6 +28,12 @@ func NewSinkService(itemSvc ItemRepo, logger log.Logger) *SinkService {
 			switch item.Source.Type {
 			case "mysql":
 				dataSink, err := sink.NewMysqlSink(item, logger)
+				if err != nil {
+					loggerHelper.Error(err)
+				}
+				sinkService.SinkMap.Store(item.SinkId, dataSink)
+			case "postgres":
+				dataSink, err := sink.NewPostgresSink(item, logger)
 				if err != nil {
 					loggerHelper.Error(err)
 				}
