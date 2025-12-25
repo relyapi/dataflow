@@ -8,13 +8,13 @@ WORKDIR /app
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 # 复制依赖文件
-COPY package.json pnpm-lock.yaml* ./
+COPY frontend/package.json pnpm-lock.yaml* ./
 
 # 安装依赖
 RUN pnpm install --frozen-lockfile
 
 # 复制代码并构建
-COPY . .
+COPY frontend/ .
 RUN pnpm run build
 
 # 第二阶段：Nginx 提供静态文件
