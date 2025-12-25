@@ -1,6 +1,6 @@
 FROM golang:1.24 AS builder
 
-COPY backend/ /src
+COPY . /src
 WORKDIR /src
 
 RUN make build
