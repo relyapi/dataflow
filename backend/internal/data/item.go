@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/tomeai/dataflow/api/v1/flow"
 	"github.com/tomeai/dataflow/internal/biz"
@@ -32,8 +33,8 @@ func (s *sourceRepo) QueryDataSinkById(ctx context.Context, sinkId string) (*flo
 	return dataSink, nil
 }
 
-// GetAllSink 获取所有Sink数据
-func (s *sourceRepo) GetAllSink(ctx context.Context) ([]*flow.Sink, error) {
+// GetSinks 获取所有Sink数据
+func (s *sourceRepo) GetSinks(ctx context.Context) ([]*flow.Sink, error) {
 	var dataSinks []*flow.Sink
 
 	// 查询所有Sink并预加载关联的Source数据
@@ -43,6 +44,15 @@ func (s *sourceRepo) GetAllSink(ctx context.Context) ([]*flow.Sink, error) {
 	}
 
 	return dataSinks, nil
+}
+
+func (s *sourceRepo) GetSources(ctx context.Context) ([]*flow.Source, error) {
+	var dataSources []*flow.Source
+	if err := s.data.db.Find(&dataSources).Error; err != nil {
+		s.log.Errorf("query all sources failed, error: %s", err.Error())
+		return nil, err
+	}
+	return dataSources, nil
 }
 
 // GetSinksBySourceId 根据Source ID获取相关的Sink列表
