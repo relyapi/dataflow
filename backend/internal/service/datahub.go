@@ -31,8 +31,8 @@ func (dataSvc *DataServiceManager) deserialize(msg *sink.DoSinkRequest) (data []
 	for _, item := range data {
 		if item != nil {
 			item.SinkId = msg.GetSinkId()
-			// sin_id+pc+item+url
-			item.StoreId = utils.CalcMD5(fmt.Sprintf("%s-%d-%d-%s", item.SinkId, item.CrawlSource, item.CrawlType, item.CrawlUrl))
+			// sink_id+pc+item+url
+			item.StoreId = utils.CalcMD5(fmt.Sprintf("%d-%d-%s-%-%s", item.CrawlSource, item.CrawlType, item.CrawlUrl, item.Data, item.Metadata))
 
 			// 解析hostname
 			parsedSpiderURL, err := url.Parse(item.CrawlUrl)
